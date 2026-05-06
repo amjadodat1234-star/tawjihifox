@@ -10,10 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TasksRouteImport } from './routes/tasks'
+import { Route as StatsRouteImport } from './routes/stats'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as QuranRouteImport } from './routes/quran'
+import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as ChatRouteImport } from './routes/chat'
+import { Route as AzkarRouteImport } from './routes/azkar'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TasksRoute = TasksRouteImport.update({
@@ -21,9 +25,24 @@ const TasksRoute = TasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StatsRoute = StatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuranRoute = QuranRouteImport.update({
   id: '/quran',
   path: '/quran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrayerRoute = PrayerRouteImport.update({
+  id: '/prayer',
+  path: '/prayer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -41,6 +60,11 @@ const ChatRoute = ChatRouteImport.update({
   path: '/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AzkarRoute = AzkarRouteImport.update({
+  id: '/azkar',
+  path: '/azkar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,43 +73,90 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/azkar': typeof AzkarRoute
   '/chat': typeof ChatRoute
   '/habits': typeof HabitsRoute
   '/login': typeof LoginRoute
+  '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
+  '/settings': typeof SettingsRoute
+  '/stats': typeof StatsRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/azkar': typeof AzkarRoute
   '/chat': typeof ChatRoute
   '/habits': typeof HabitsRoute
   '/login': typeof LoginRoute
+  '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
+  '/settings': typeof SettingsRoute
+  '/stats': typeof StatsRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/azkar': typeof AzkarRoute
   '/chat': typeof ChatRoute
   '/habits': typeof HabitsRoute
   '/login': typeof LoginRoute
+  '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
+  '/settings': typeof SettingsRoute
+  '/stats': typeof StatsRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chat' | '/habits' | '/login' | '/quran' | '/tasks'
+  fullPaths:
+    | '/'
+    | '/azkar'
+    | '/chat'
+    | '/habits'
+    | '/login'
+    | '/prayer'
+    | '/quran'
+    | '/settings'
+    | '/stats'
+    | '/tasks'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chat' | '/habits' | '/login' | '/quran' | '/tasks'
-  id: '__root__' | '/' | '/chat' | '/habits' | '/login' | '/quran' | '/tasks'
+  to:
+    | '/'
+    | '/azkar'
+    | '/chat'
+    | '/habits'
+    | '/login'
+    | '/prayer'
+    | '/quran'
+    | '/settings'
+    | '/stats'
+    | '/tasks'
+  id:
+    | '__root__'
+    | '/'
+    | '/azkar'
+    | '/chat'
+    | '/habits'
+    | '/login'
+    | '/prayer'
+    | '/quran'
+    | '/settings'
+    | '/stats'
+    | '/tasks'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AzkarRoute: typeof AzkarRoute
   ChatRoute: typeof ChatRoute
   HabitsRoute: typeof HabitsRoute
   LoginRoute: typeof LoginRoute
+  PrayerRoute: typeof PrayerRoute
   QuranRoute: typeof QuranRoute
+  SettingsRoute: typeof SettingsRoute
+  StatsRoute: typeof StatsRoute
   TasksRoute: typeof TasksRoute
 }
 
@@ -98,11 +169,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TasksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stats': {
+      id: '/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof StatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quran': {
       id: '/quran'
       path: '/quran'
       fullPath: '/quran'
       preLoaderRoute: typeof QuranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prayer': {
+      id: '/prayer'
+      path: '/prayer'
+      fullPath: '/prayer'
+      preLoaderRoute: typeof PrayerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -126,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/azkar': {
+      id: '/azkar'
+      path: '/azkar'
+      fullPath: '/azkar'
+      preLoaderRoute: typeof AzkarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -138,21 +237,16 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AzkarRoute: AzkarRoute,
   ChatRoute: ChatRoute,
   HabitsRoute: HabitsRoute,
   LoginRoute: LoginRoute,
+  PrayerRoute: PrayerRoute,
   QuranRoute: QuranRoute,
+  SettingsRoute: SettingsRoute,
+  StatsRoute: StatsRoute,
   TasksRoute: TasksRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
