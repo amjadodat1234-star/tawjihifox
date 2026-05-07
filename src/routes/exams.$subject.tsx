@@ -113,7 +113,7 @@ function Quiz({ subject, year, semester, questions, onBack }: { subject: string;
   };
 
   const submit = async () => {
-    const score = answers.reduce((s, a, i) => s + (a === questions[i].answer ? 1 : 0), 0);
+    const score: number = answers.reduce<number>((s, a, i) => s + (a === questions[i].answer ? 1 : 0), 0);
     setSubmitted(true);
     const duration = Math.round((Date.now() - startTime) / 1000);
     if (user) {
@@ -122,7 +122,7 @@ function Quiz({ subject, year, semester, questions, onBack }: { subject: string;
     toast.success(`نتيجتك: ${score}/${questions.length}`);
   };
 
-  const score = submitted ? answers.reduce((s, a, i) => s + (a === questions[i].answer ? 1 : 0), 0) : 0;
+  const score: number = submitted ? answers.reduce<number>((s, a, i) => s + (a === questions[i].answer ? 1 : 0), 0) : 0;
   const allAnswered = answers.every((a) => a !== null);
 
   return (
