@@ -14,6 +14,9 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as QuranRouteImport } from './routes/quran'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as FocusRouteImport } from './routes/focus'
+import { Route as ExamsRouteImport } from './routes/exams'
 import { Route as AzkarRouteImport } from './routes/azkar'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -42,6 +45,21 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FocusRoute = FocusRouteImport.update({
+  id: '/focus',
+  path: '/focus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamsRoute = ExamsRouteImport.update({
+  id: '/exams',
+  path: '/exams',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AzkarRoute = AzkarRouteImport.update({
   id: '/azkar',
   path: '/azkar',
@@ -56,6 +74,9 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/azkar': typeof AzkarRoute
+  '/exams': typeof ExamsRoute
+  '/focus': typeof FocusRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
@@ -65,6 +86,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/azkar': typeof AzkarRoute
+  '/exams': typeof ExamsRoute
+  '/focus': typeof FocusRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
@@ -75,6 +99,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/azkar': typeof AzkarRoute
+  '/exams': typeof ExamsRoute
+  '/focus': typeof FocusRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
@@ -86,17 +113,33 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/azkar'
+    | '/exams'
+    | '/focus'
+    | '/leaderboard'
     | '/login'
     | '/prayer'
     | '/quran'
     | '/settings'
     | '/stats'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/azkar' | '/login' | '/prayer' | '/quran' | '/settings' | '/stats'
+  to:
+    | '/'
+    | '/azkar'
+    | '/exams'
+    | '/focus'
+    | '/leaderboard'
+    | '/login'
+    | '/prayer'
+    | '/quran'
+    | '/settings'
+    | '/stats'
   id:
     | '__root__'
     | '/'
     | '/azkar'
+    | '/exams'
+    | '/focus'
+    | '/leaderboard'
     | '/login'
     | '/prayer'
     | '/quran'
@@ -107,6 +150,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AzkarRoute: typeof AzkarRoute
+  ExamsRoute: typeof ExamsRoute
+  FocusRoute: typeof FocusRoute
+  LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
   PrayerRoute: typeof PrayerRoute
   QuranRoute: typeof QuranRoute
@@ -151,6 +197,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/focus': {
+      id: '/focus'
+      path: '/focus'
+      fullPath: '/focus'
+      preLoaderRoute: typeof FocusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exams': {
+      id: '/exams'
+      path: '/exams'
+      fullPath: '/exams'
+      preLoaderRoute: typeof ExamsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/azkar': {
       id: '/azkar'
       path: '/azkar'
@@ -171,6 +238,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AzkarRoute: AzkarRoute,
+  ExamsRoute: ExamsRoute,
+  FocusRoute: FocusRoute,
+  LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
   PrayerRoute: PrayerRoute,
   QuranRoute: QuranRoute,
