@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
@@ -36,49 +37,52 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-display: "Tajawal", "Cairo", system-ui, sans-serif;
+  --font-display: "Cairo", "Tajawal", system-ui, sans-serif;
+  --font-body: "Tajawal", system-ui, sans-serif;
+  --font-quran: "Amiri", "Tajawal", serif;
 }
 
 :root {
-  --radius: 0.875rem;
-  /* Warm cozy night theme */
-  --background: oklch(0.18 0.02 50);
-  --foreground: oklch(0.95 0.02 80);
+  --radius: 1rem;
+  --background: oklch(0.16 0.02 50);
+  --foreground: oklch(0.96 0.02 80);
   --card: oklch(0.22 0.025 50 / 0.7);
-  --card-foreground: oklch(0.95 0.02 80);
+  --card-foreground: oklch(0.96 0.02 80);
   --popover: oklch(0.22 0.025 50);
-  --popover-foreground: oklch(0.95 0.02 80);
+  --popover-foreground: oklch(0.96 0.02 80);
   --primary: oklch(0.78 0.15 65);
-  --primary-foreground: oklch(0.18 0.02 50);
+  --primary-foreground: oklch(0.16 0.02 50);
   --secondary: oklch(0.28 0.03 55);
-  --secondary-foreground: oklch(0.95 0.02 80);
+  --secondary-foreground: oklch(0.96 0.02 80);
   --muted: oklch(0.25 0.02 50);
-  --muted-foreground: oklch(0.7 0.03 70);
+  --muted-foreground: oklch(0.72 0.03 70);
   --accent: oklch(0.72 0.18 55);
-  --accent-foreground: oklch(0.18 0.02 50);
+  --accent-foreground: oklch(0.16 0.02 50);
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(0.98 0.01 80);
   --border: oklch(1 0 0 / 0.08);
   --input: oklch(1 0 0 / 0.1);
   --ring: oklch(0.78 0.15 65);
-  --sidebar: oklch(0.16 0.02 50 / 0.92);
+  --sidebar: oklch(0.14 0.02 50 / 0.96);
   --sidebar-foreground: oklch(0.92 0.02 80);
   --sidebar-primary: oklch(0.78 0.15 65);
-  --sidebar-primary-foreground: oklch(0.18 0.02 50);
+  --sidebar-primary-foreground: oklch(0.16 0.02 50);
   --sidebar-accent: oklch(0.25 0.03 55);
-  --sidebar-accent-foreground: oklch(0.95 0.02 80);
+  --sidebar-accent-foreground: oklch(0.96 0.02 80);
   --sidebar-border: oklch(1 0 0 / 0.06);
   --sidebar-ring: oklch(0.78 0.15 65);
 
   --gradient-warm: linear-gradient(135deg, oklch(0.78 0.15 65), oklch(0.65 0.2 35));
+  --gradient-night: linear-gradient(160deg, oklch(0.18 0.03 50), oklch(0.13 0.02 40));
   --gradient-overlay: linear-gradient(180deg, oklch(0.15 0.03 50 / 0.4), oklch(0.12 0.02 40 / 0.75));
   --shadow-glow: 0 0 80px oklch(0.78 0.15 65 / 0.25);
   --shadow-soft: 0 10px 40px oklch(0 0 0 / 0.4);
+  --shadow-elev: 0 20px 60px -10px oklch(0 0 0 / 0.6);
 }
 
 .dark {
-  --background: oklch(0.18 0.02 50);
-  --foreground: oklch(0.95 0.02 80);
+  --background: oklch(0.16 0.02 50);
+  --foreground: oklch(0.96 0.02 80);
 }
 
 @layer base {
@@ -87,9 +91,10 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
   }
+  h1,h2,h3,h4,h5 { font-family: var(--font-display); letter-spacing: -0.01em; }
 }
 
 @layer utilities {
@@ -111,4 +116,20 @@
   }
   .glow-warm { box-shadow: var(--shadow-glow); }
   .soft-shadow { box-shadow: var(--shadow-soft); }
+  .elev-shadow { box-shadow: var(--shadow-elev); }
+  .font-quran { font-family: var(--font-quran); }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: oklch(1 0 0 / 0.1); border-radius: 3px; }
 }
+
+@keyframes pulse-warm {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.78 0.15 65 / 0.6); }
+  50% { box-shadow: 0 0 0 20px oklch(0.78 0.15 65 / 0); }
+}
+.pulse-warm { animation: pulse-warm 2s infinite; }
+
+@keyframes float-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.float-in { animation: float-in 0.5s ease-out; }

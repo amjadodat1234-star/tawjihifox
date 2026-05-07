@@ -14,6 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
+      comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_attempts: {
+        Row: {
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          score: number
+          subject: string
+          total: number
+          user_id: string
+          year: string
+        }
+        Insert: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          score: number
+          subject: string
+          total: number
+          user_id: string
+          year: string
+        }
+        Update: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          score?: number
+          subject?: string
+          total?: number
+          user_id?: string
+          year?: string
+        }
+        Relationships: []
+      }
       focus_sessions: {
         Row: {
           completed_at: string
@@ -38,76 +103,80 @@ export type Database = {
         }
         Relationships: []
       }
-      habit_logs: {
+      notes: {
         Row: {
-          habit_id: string
-          id: string
-          log_date: string
-          user_id: string
-        }
-        Insert: {
-          habit_id: string
-          id?: string
-          log_date?: string
-          user_id: string
-        }
-        Update: {
-          habit_id?: string
-          id?: string
-          log_date?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "habit_logs_habit_id_fkey"
-            columns: ["habit_id"]
-            isOneToOne: false
-            referencedRelation: "habits"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      habits: {
-        Row: {
+          color: string
+          content: string
           created_at: string
-          icon: string | null
           id: string
-          name: string
+          title: string
+          updated_at: string
           user_id: string
         }
         Insert: {
+          color?: string
+          content?: string
           created_at?: string
-          icon?: string | null
           id?: string
-          name: string
+          title?: string
+          updated_at?: string
           user_id: string
         }
         Update: {
+          color?: string
+          content?: string
           created_at?: string
-          icon?: string | null
           id?: string
-          name?: string
+          title?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
       }
-      messages: {
+      page_visits: {
         Row: {
+          id: string
+          path: string
+          user_id: string | null
+          visited_at: string
+        }
+        Insert: {
+          id?: string
+          path: string
+          user_id?: string | null
+          visited_at?: string
+        }
+        Update: {
+          id?: string
+          path?: string
+          user_id?: string | null
+          visited_at?: string
+        }
+        Relationships: []
+      }
+      posts: {
+        Row: {
+          category: string
           content: string
           created_at: string
           id: string
+          title: string
           user_id: string
         }
         Insert: {
+          category?: string
           content: string
           created_at?: string
           id?: string
+          title: string
           user_id: string
         }
         Update: {
+          category?: string
           content?: string
           created_at?: string
           id?: string
+          title?: string
           user_id?: string
         }
         Relationships: []
@@ -160,29 +229,107 @@ export type Database = {
         }
         Relationships: []
       }
-      tasks: {
+      study_files: {
         Row: {
-          completed: boolean
           created_at: string
-          due_date: string | null
+          description: string | null
+          file_path: string
+          file_size: number | null
           id: string
+          subject: string
           title: string
           user_id: string
         }
         Insert: {
-          completed?: boolean
           created_at?: string
-          due_date?: string | null
+          description?: string | null
+          file_path: string
+          file_size?: number | null
           id?: string
+          subject: string
           title: string
           user_id: string
         }
         Update: {
-          completed?: boolean
           created_at?: string
-          due_date?: string | null
+          description?: string | null
+          file_path?: string
+          file_size?: number | null
           id?: string
+          subject?: string
           title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      suggestions: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_streaks: {
+        Row: {
+          current_streak: number
+          last_focus_date: string | null
+          longest_streak: number
+          total_focus_minutes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          current_streak?: number
+          last_focus_date?: string | null
+          longest_streak?: number
+          total_focus_minutes?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          current_streak?: number
+          last_focus_date?: string | null
+          longest_streak?: number
+          total_focus_minutes?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -192,10 +339,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -322,6 +475,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

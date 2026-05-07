@@ -9,20 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TasksRouteImport } from './routes/tasks'
+import { Route as SuggestionsRouteImport } from './routes/suggestions'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as QuranRouteImport } from './routes/quran'
 import { Route as PrayerRouteImport } from './routes/prayer'
+import { Route as NotesRouteImport } from './routes/notes'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as HabitsRouteImport } from './routes/habits'
-import { Route as ChatRouteImport } from './routes/chat'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as ForumRouteImport } from './routes/forum'
+import { Route as FocusRouteImport } from './routes/focus'
+import { Route as FilesRouteImport } from './routes/files'
+import { Route as ExamsRouteImport } from './routes/exams'
 import { Route as AzkarRouteImport } from './routes/azkar'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ForumIdRouteImport } from './routes/forum.$id'
+import { Route as ExamsSubjectRouteImport } from './routes/exams.$subject'
 
-const TasksRoute = TasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
+const SuggestionsRoute = SuggestionsRouteImport.update({
+  id: '/suggestions',
+  path: '/suggestions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StatsRoute = StatsRouteImport.update({
@@ -45,19 +52,39 @@ const PrayerRoute = PrayerRouteImport.update({
   path: '/prayer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HabitsRoute = HabitsRouteImport.update({
-  id: '/habits',
-  path: '/habits',
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChatRoute = ChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
+const ForumRoute = ForumRouteImport.update({
+  id: '/forum',
+  path: '/forum',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FocusRoute = FocusRouteImport.update({
+  id: '/focus',
+  path: '/focus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FilesRoute = FilesRouteImport.update({
+  id: '/files',
+  path: '/files',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamsRoute = ExamsRouteImport.update({
+  id: '/exams',
+  path: '/exams',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AzkarRoute = AzkarRouteImport.update({
@@ -65,108 +92,170 @@ const AzkarRoute = AzkarRouteImport.update({
   path: '/azkar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForumIdRoute = ForumIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ForumRoute,
+} as any)
+const ExamsSubjectRoute = ExamsSubjectRouteImport.update({
+  id: '/$subject',
+  path: '/$subject',
+  getParentRoute: () => ExamsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/azkar': typeof AzkarRoute
-  '/chat': typeof ChatRoute
-  '/habits': typeof HabitsRoute
+  '/exams': typeof ExamsRouteWithChildren
+  '/files': typeof FilesRoute
+  '/focus': typeof FocusRoute
+  '/forum': typeof ForumRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
+  '/notes': typeof NotesRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
-  '/tasks': typeof TasksRoute
+  '/suggestions': typeof SuggestionsRoute
+  '/exams/$subject': typeof ExamsSubjectRoute
+  '/forum/$id': typeof ForumIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/azkar': typeof AzkarRoute
-  '/chat': typeof ChatRoute
-  '/habits': typeof HabitsRoute
+  '/exams': typeof ExamsRouteWithChildren
+  '/files': typeof FilesRoute
+  '/focus': typeof FocusRoute
+  '/forum': typeof ForumRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
+  '/notes': typeof NotesRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
-  '/tasks': typeof TasksRoute
+  '/suggestions': typeof SuggestionsRoute
+  '/exams/$subject': typeof ExamsSubjectRoute
+  '/forum/$id': typeof ForumIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/azkar': typeof AzkarRoute
-  '/chat': typeof ChatRoute
-  '/habits': typeof HabitsRoute
+  '/exams': typeof ExamsRouteWithChildren
+  '/files': typeof FilesRoute
+  '/focus': typeof FocusRoute
+  '/forum': typeof ForumRouteWithChildren
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
+  '/notes': typeof NotesRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
-  '/tasks': typeof TasksRoute
+  '/suggestions': typeof SuggestionsRoute
+  '/exams/$subject': typeof ExamsSubjectRoute
+  '/forum/$id': typeof ForumIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/azkar'
-    | '/chat'
-    | '/habits'
+    | '/exams'
+    | '/files'
+    | '/focus'
+    | '/forum'
+    | '/leaderboard'
     | '/login'
+    | '/notes'
     | '/prayer'
     | '/quran'
     | '/settings'
     | '/stats'
-    | '/tasks'
+    | '/suggestions'
+    | '/exams/$subject'
+    | '/forum/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/azkar'
-    | '/chat'
-    | '/habits'
+    | '/exams'
+    | '/files'
+    | '/focus'
+    | '/forum'
+    | '/leaderboard'
     | '/login'
+    | '/notes'
     | '/prayer'
     | '/quran'
     | '/settings'
     | '/stats'
-    | '/tasks'
+    | '/suggestions'
+    | '/exams/$subject'
+    | '/forum/$id'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/azkar'
-    | '/chat'
-    | '/habits'
+    | '/exams'
+    | '/files'
+    | '/focus'
+    | '/forum'
+    | '/leaderboard'
     | '/login'
+    | '/notes'
     | '/prayer'
     | '/quran'
     | '/settings'
     | '/stats'
-    | '/tasks'
+    | '/suggestions'
+    | '/exams/$subject'
+    | '/forum/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AzkarRoute: typeof AzkarRoute
-  ChatRoute: typeof ChatRoute
-  HabitsRoute: typeof HabitsRoute
+  ExamsRoute: typeof ExamsRouteWithChildren
+  FilesRoute: typeof FilesRoute
+  FocusRoute: typeof FocusRoute
+  ForumRoute: typeof ForumRouteWithChildren
+  LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
+  NotesRoute: typeof NotesRoute
   PrayerRoute: typeof PrayerRoute
   QuranRoute: typeof QuranRoute
   SettingsRoute: typeof SettingsRoute
   StatsRoute: typeof StatsRoute
-  TasksRoute: typeof TasksRoute
+  SuggestionsRoute: typeof SuggestionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tasks': {
-      id: '/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof TasksRouteImport
+    '/suggestions': {
+      id: '/suggestions'
+      path: '/suggestions'
+      fullPath: '/suggestions'
+      preLoaderRoute: typeof SuggestionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/stats': {
@@ -197,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrayerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -204,18 +300,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/habits': {
-      id: '/habits'
-      path: '/habits'
-      fullPath: '/habits'
-      preLoaderRoute: typeof HabitsRouteImport
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chat': {
-      id: '/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof ChatRouteImport
+    '/forum': {
+      id: '/forum'
+      path: '/forum'
+      fullPath: '/forum'
+      preLoaderRoute: typeof ForumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/focus': {
+      id: '/focus'
+      path: '/focus'
+      fullPath: '/focus'
+      preLoaderRoute: typeof FocusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/files': {
+      id: '/files'
+      path: '/files'
+      fullPath: '/files'
+      preLoaderRoute: typeof FilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exams': {
+      id: '/exams'
+      path: '/exams'
+      fullPath: '/exams'
+      preLoaderRoute: typeof ExamsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/azkar': {
@@ -225,6 +342,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AzkarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -232,30 +356,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forum/$id': {
+      id: '/forum/$id'
+      path: '/$id'
+      fullPath: '/forum/$id'
+      preLoaderRoute: typeof ForumIdRouteImport
+      parentRoute: typeof ForumRoute
+    }
+    '/exams/$subject': {
+      id: '/exams/$subject'
+      path: '/$subject'
+      fullPath: '/exams/$subject'
+      preLoaderRoute: typeof ExamsSubjectRouteImport
+      parentRoute: typeof ExamsRoute
+    }
   }
 }
 
+interface ExamsRouteChildren {
+  ExamsSubjectRoute: typeof ExamsSubjectRoute
+}
+
+const ExamsRouteChildren: ExamsRouteChildren = {
+  ExamsSubjectRoute: ExamsSubjectRoute,
+}
+
+const ExamsRouteWithChildren = ExamsRoute._addFileChildren(ExamsRouteChildren)
+
+interface ForumRouteChildren {
+  ForumIdRoute: typeof ForumIdRoute
+}
+
+const ForumRouteChildren: ForumRouteChildren = {
+  ForumIdRoute: ForumIdRoute,
+}
+
+const ForumRouteWithChildren = ForumRoute._addFileChildren(ForumRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AzkarRoute: AzkarRoute,
-  ChatRoute: ChatRoute,
-  HabitsRoute: HabitsRoute,
+  ExamsRoute: ExamsRouteWithChildren,
+  FilesRoute: FilesRoute,
+  FocusRoute: FocusRoute,
+  ForumRoute: ForumRouteWithChildren,
+  LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
+  NotesRoute: NotesRoute,
   PrayerRoute: PrayerRoute,
   QuranRoute: QuranRoute,
   SettingsRoute: SettingsRoute,
   StatsRoute: StatsRoute,
-  TasksRoute: TasksRoute,
+  SuggestionsRoute: SuggestionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
