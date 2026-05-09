@@ -1,12 +1,11 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { AuthGate, PageBackground } from "@/components/AuthGate";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { ChevronRight, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/forum/$id")({ component: () => <AuthGate><PostPage /></AuthGate> });
+export const Route = createFileRoute("/forum/$id")({ component: PostPage });
 
 interface Post { id: string; user_id: string; title: string; content: string; category: string; created_at: string }
 interface Comment { id: string; user_id: string; content: string; created_at: string }
@@ -36,7 +35,8 @@ function PostPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !text.trim()) return;
+    if (!user) return toast("سجّل دخولك للتعليق");
+    if (!text.trim()) return;
     const { error } = await supabase.from("comments").insert({ post_id: id, user_id: user.id, content: text.trim() });
     if (error) return toast.error("فشل");
     setText(""); load();
@@ -47,10 +47,10 @@ function PostPage() {
     load();
   };
 
-  if (!post) return <PageBackground><div className="p-8 text-center">جارٍ التحميل...</div></PageBackground>;
+  if (!post) return <div className="p-8 text-center">جارٍ التحميل...</div>;
 
   return (
-    <PageBackground dim={0.65}>
+    <div>
       <div className="mx-auto max-w-3xl px-4 py-8">
         <Link to="/forum" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary mb-4"><ChevronRight className="h-4 w-4" />العودة للمنتدى</Link>
         <div className="glass-strong rounded-2xl p-6 mb-6">
@@ -79,6 +79,6 @@ function PostPage() {
           ))}
         </div>
       </div>
-    </PageBackground>
+    </div>
   );
 }

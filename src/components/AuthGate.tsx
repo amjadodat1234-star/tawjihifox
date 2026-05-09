@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
-import bg from "@/assets/cabin-bg.jpg";
+import { Lock } from "lucide-react";
 
+/** Strict gate — redirects to /login if not authenticated. Use only for sensitive pages. */
 export function AuthGate({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -16,12 +17,26 @@ export function AuthGate({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
-export function PageBackground({ children, dim = 0.55 }: { children: ReactNode; dim?: number }) {
+/** Public wrapper — anyone can view. */
+export function PublicView({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}
+
+/** Soft prompt to log in for an action. */
+export function LoginRequired({ message = "سجّل دخولك للمتابعة" }: { message?: string }) {
+  const navigate = useNavigate();
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      <img src={bg} alt="" aria-hidden width={1920} height={1080} className="fixed inset-0 -z-10 h-full w-full object-cover" />
-      <div className="fixed inset-0 -z-10" style={{ background: `linear-gradient(180deg, oklch(0.15 0.03 50 / ${dim}), oklch(0.12 0.02 40 / ${Math.min(dim + 0.2, 0.95)}))` }} />
-      {children}
+    <div className="surface-card rounded-2xl p-6 text-center">
+      <Lock className="mx-auto mb-3 h-8 w-8 text-primary" />
+      <p className="mb-4 text-sm text-muted-foreground">{message}</p>
+      <button onClick={() => navigate({ to: "/login" })} className="rounded-full bg-primary text-primary-foreground px-6 py-2 text-sm font-bold hover:opacity-90">
+        تسجيل الدخول
+      </button>
     </div>
   );
+}
+
+/** Page wrapper with clean white background. */
+export function PageBackground({ children }: { children: ReactNode; dim?: number }) {
+  return <div className="relative min-h-screen">{children}</div>;
 }
