@@ -1,12 +1,11 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { AuthGate, PageBackground } from "@/components/AuthGate";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { ChevronRight, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/forum/$id")({ component: () => <AuthGate><PostPage /></AuthGate> });
+export const Route = createFileRoute("/forum/$id")({ component: PostPage });
 
 interface Post { id: string; user_id: string; title: string; content: string; category: string; created_at: string }
 interface Comment { id: string; user_id: string; content: string; created_at: string }
