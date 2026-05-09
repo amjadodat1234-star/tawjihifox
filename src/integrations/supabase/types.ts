@@ -81,23 +81,32 @@ export type Database = {
       }
       focus_sessions: {
         Row: {
+          completed: boolean | null
           completed_at: string
           duration_minutes: number
           id: string
+          subject: string | null
+          task_name: string | null
           type: string
           user_id: string
         }
         Insert: {
+          completed?: boolean | null
           completed_at?: string
           duration_minutes: number
           id?: string
+          subject?: string | null
+          task_name?: string | null
           type?: string
           user_id: string
         }
         Update: {
+          completed?: boolean | null
           completed_at?: string
           duration_minutes?: number
           id?: string
+          subject?: string | null
+          task_name?: string | null
           type?: string
           user_id?: string
         }
@@ -154,12 +163,43 @@ export type Database = {
         }
         Relationships: []
       }
+      post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           category: string
           content: string
           created_at: string
           id: string
+          image_url: string | null
+          pinned: boolean
           title: string
           user_id: string
         }
@@ -168,6 +208,8 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          image_url?: string | null
+          pinned?: boolean
           title: string
           user_id: string
         }
@@ -176,6 +218,8 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          image_url?: string | null
+          pinned?: boolean
           title?: string
           user_id?: string
         }
