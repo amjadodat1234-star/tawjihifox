@@ -201,5 +201,21 @@
   animation: shimmer 3s linear infinite;
 }
 
+/* Global tactile button feel */
+@layer base {
+  button:not(:disabled), a[role="button"], .btn-press {
+    transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease, opacity .2s ease, filter .2s ease;
+  }
+  button:not(:disabled):hover, a[role="button"]:hover, .btn-press:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+  button:not(:disabled):active, a[role="button"]:active, .btn-press:active {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+.bg-gradient-hero { background: var(--gradient-hero); }
+
 /* Hide Lovable badge if it injects (works only on Pro plan officially) */
 #lovable-badge, [data-lovable-badge] { display: none !important; }
