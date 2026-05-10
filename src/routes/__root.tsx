@@ -133,22 +133,54 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
+function ActiveTaskBadge() {
+  const [remaining, setRemaining] = useState<{ name: string; secs: number } | null>(null);
+  useEffect(() => {
+    const tick = () => {
+      try {
+        const raw = localStorage.getItem("activeTask");
+        if (!raw) return setRemaining(null);
+        const t = JSON.parse(raw) as { name: string; endsAt: number };
+        const secs = Math.max(0, Math.floor((t.endsAt - Date.now()) / 1000));
+        if (secs <= 0) { localStorage.removeItem("activeTask"); return setRemaining(null); }
+        setRemaining({ name: t.name, secs });
+      } catch { setRemaining(null); }
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  if (!remaining) return null;
+  const m = String(Math.floor(remaining.secs / 60)).padStart(2, "0");
+  const s = String(remaining.secs % 60).padStart(2, "0");
+  return (
+    <Link to="/focus" className="hidden sm:flex items-center gap-2 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-bold border border-primary/20 hover:bg-primary/15">
+      <Clock className="h-3.5 w-3.5" />
+      <span className="tabular-nums">{m}:{s}</span>
+      <span className="max-w-[100px] truncate">{remaining.name}</span>
+    </Link>
+  );
+}
+
 function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
   const { user } = useAuth();
   return (
     <header className="sticky top-0 z-30 glass-strong border-b border-border">
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between px-4 py-3 gap-2">
         <button onClick={onOpenSidebar} className="rounded-lg p-2 hover:bg-secondary transition-colors" aria-label="فتح القائمة">
           <Menu className="h-5 w-5" />
         </button>
         <Link to="/" className="text-lg font-extrabold text-gradient-primary">توجيهي فوكس</Link>
-        {user ? (
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground text-xs font-bold">
-            {(user.email?.[0] || "?").toUpperCase()}
-          </div>
-        ) : (
-          <Link to="/login" className="text-xs font-bold text-primary hover:underline">دخول</Link>
-        )}
+        <div className="flex items-center gap-2">
+          <ActiveTaskBadge />
+          {user ? (
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground text-xs font-bold">
+              {(user.email?.[0] || "?").toUpperCase()}
+            </div>
+          ) : (
+            <Link to="/login" className="text-xs font-bold text-primary hover:underline">دخول</Link>
+          )}
+        </div>
       </div>
     </header>
   );
@@ -157,14 +189,16 @@ function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
 function RootComponent() {
   const { loading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { location } = useRouterState();
   useTrackVisits();
   useEffect(() => { setSidebarOpen(false); }, []);
   if (loading) {
     return <div className="flex min-h-screen items-center justify-center"><div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" /></div>;
   }
+  const hideTopBar = location.pathname === "/focus";
   return (
     <div className="min-h-screen">
-      <TopBar onOpenSidebar={() => setSidebarOpen(true)} />
+      {!hideTopBar && <TopBar onOpenSidebar={() => setSidebarOpen(true)} />}
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main><Outlet /></main>
     </div>
