@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS name_updated_at timestamptz NOT NULL DEFAULT now();

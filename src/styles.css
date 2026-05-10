@@ -57,8 +57,8 @@
   --secondary-foreground: oklch(0.22 0.04 200);
   --muted: oklch(0.96 0.01 180);
   --muted-foreground: oklch(0.5 0.03 200);
-  --accent: oklch(0.78 0.12 60);
-  --accent-foreground: oklch(0.22 0.04 200);
+  --accent: oklch(0.74 0.17 45);
+  --accent-foreground: oklch(0.99 0.01 60);
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(0.99 0.005 180);
   --border: oklch(0.9 0.01 200);
@@ -74,7 +74,8 @@
   --sidebar-ring: oklch(0.62 0.14 180);
 
   --gradient-primary: linear-gradient(135deg, oklch(0.62 0.14 180), oklch(0.55 0.16 200));
-  --gradient-warm: linear-gradient(135deg, oklch(0.78 0.12 60), oklch(0.7 0.16 35));
+  --gradient-warm: linear-gradient(135deg, oklch(0.74 0.17 45), oklch(0.68 0.19 30));
+  --gradient-hero: linear-gradient(135deg, oklch(0.62 0.14 180), oklch(0.55 0.18 260));
   --gradient-soft: linear-gradient(180deg, oklch(0.99 0.01 180), oklch(0.96 0.02 190));
   --shadow-card: 0 4px 24px -8px oklch(0.4 0.05 200 / 0.12);
   --shadow-elev: 0 12px 40px -10px oklch(0.4 0.05 200 / 0.18);
@@ -199,6 +200,22 @@
   -webkit-text-fill-color: transparent;
   animation: shimmer 3s linear infinite;
 }
+
+/* Global tactile button feel */
+@layer base {
+  button:not(:disabled), a[role="button"], .btn-press {
+    transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease, opacity .2s ease, filter .2s ease;
+  }
+  button:not(:disabled):hover, a[role="button"]:hover, .btn-press:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+  button:not(:disabled):active, a[role="button"]:active, .btn-press:active {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+.bg-gradient-hero { background: var(--gradient-hero); }
 
 /* Hide Lovable badge if it injects (works only on Pro plan officially) */
 #lovable-badge, [data-lovable-badge] { display: none !important; }
