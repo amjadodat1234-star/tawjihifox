@@ -19,6 +19,7 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          parent_id: string | null
           post_id: string
           user_id: string
         }
@@ -26,6 +27,7 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          parent_id?: string | null
           post_id: string
           user_id: string
         }
@@ -33,6 +35,7 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          parent_id?: string | null
           post_id?: string
           user_id?: string
         }
@@ -108,6 +111,42 @@ export type Database = {
           subject?: string | null
           task_name?: string | null
           type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      missions: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          done_minutes: number
+          id: string
+          name: string
+          period: string
+          status: string
+          target_minutes: number
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          done_minutes?: number
+          id?: string
+          name: string
+          period: string
+          status?: string
+          target_minutes: number
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          done_minutes?: number
+          id?: string
+          name?: string
+          period?: string
+          status?: string
+          target_minutes?: number
           user_id?: string
         }
         Relationships: []
