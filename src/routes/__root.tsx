@@ -5,7 +5,10 @@ import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { useIsAdmin } from "@/lib/use-role";
 import { useTrackVisits } from "@/lib/track-visit";
 import { Toaster } from "@/components/ui/sonner";
-import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User } from "lucide-react";
 
 function NotFoundComponent() {
   return (
@@ -162,8 +165,53 @@ function ActiveTaskBadge() {
   );
 }
 
+function UserMenu() {
+  const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
+  const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
+  useEffect(() => {
+    if (!user) { setProfile(null); return; }
+    supabase.from("profiles").select("display_name, avatar_url").eq("id", user.id).maybeSingle()
+      .then(({ data }) => setProfile(data));
+    const ch = supabase.channel(`profile-${user.id}`).on("postgres_changes", { event: "UPDATE", schema: "public", table: "profiles", filter: `id=eq.${user.id}` }, (p) => {
+      const r = p.new as { display_name: string | null; avatar_url: string | null };
+      setProfile({ display_name: r.display_name, avatar_url: r.avatar_url });
+    }).subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [user]);
+  if (!user) {
+    return <Link to="/login" className="text-xs font-bold text-primary hover:underline">دخول</Link>;
+  }
+  const initial = (profile?.display_name?.[0] || user.email?.[0] || "?").toUpperCase();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="rounded-full ring-2 ring-transparent hover:ring-primary/40 transition-all outline-none focus:ring-primary/60">
+        <Avatar className="h-9 w-9">
+          {profile?.avatar_url && <AvatarImage src={profile.avatar_url} alt="" />}
+          <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-xs font-bold">{initial}</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="flex flex-col gap-0.5">
+          <span className="font-bold text-sm truncate">{profile?.display_name || "مستخدم"}</span>
+          <span className="text-[11px] text-muted-foreground font-normal truncate">{user.email}</span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild><Link to="/settings" className="cursor-pointer"><User className="h-4 w-4 ml-2" />الإعدادات</Link></DropdownMenuItem>
+        <DropdownMenuItem asChild><Link to="/stats" className="cursor-pointer"><BarChart3 className="h-4 w-4 ml-2" />إحصائياتي</Link></DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem asChild><Link to="/admin" className="cursor-pointer text-primary"><ShieldCheck className="h-4 w-4 ml-2" />لوحة الأدمن</Link></DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={signOut} className="cursor-pointer text-destructive focus:text-destructive">
+          <LogOut className="h-4 w-4 ml-2" />تسجيل الخروج
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
-  const { user } = useAuth();
   return (
     <header className="sticky top-0 z-30 glass-strong border-b border-border">
       <div className="flex items-center justify-between px-4 py-3 gap-2">
@@ -173,13 +221,7 @@ function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
         <Link to="/" className="text-lg font-extrabold text-gradient-primary">توجيهي فوكس</Link>
         <div className="flex items-center gap-2">
           <ActiveTaskBadge />
-          {user ? (
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground text-xs font-bold">
-              {(user.email?.[0] || "?").toUpperCase()}
-            </div>
-          ) : (
-            <Link to="/login" className="text-xs font-bold text-primary hover:underline">دخول</Link>
-          )}
+          <UserMenu />
         </div>
       </div>
     </header>
