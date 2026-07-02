@@ -1,6 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import appCss from "../styles.css?url";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { useIsAdmin } from "@/lib/use-role";
@@ -9,36 +8,19 @@ import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User, Search, Command as CommandIcon, Ghost, ArrowRight } from "lucide-react";
-import { ScrollProgress } from "@/components/ScrollProgress";
-import { CursorGlow } from "@/components/CursorGlow";
-import { CommandPalette } from "@/components/CommandPalette";
-import { PageTransition } from "@/components/PageTransition";
-import { StreakChip } from "@/components/StreakChip";
+import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User } from "lucide-react";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 aurora-bg">
-      <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: "spring", stiffness: 150, damping: 15 }}
-        className="max-w-md text-center surface-card rounded-3xl p-10 spotlight"
-      >
-        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity }} className="mx-auto mb-4 inline-block">
-          <Ghost className="h-16 w-16 text-primary" />
-        </motion.div>
-        <h1 className="text-8xl font-extrabold text-gradient-primary tracking-tight">404</h1>
-        <h2 className="mt-2 text-xl font-semibold">ضعنا في الطريق قليلاً</h2>
-        <p className="mt-2 text-sm text-muted-foreground">الصفحة يلي بتدور عليها مش موجودة، لكن في مليون طريق ثاني.</p>
-        <Link to="/" className="mt-6 inline-flex items-center gap-2 rounded-full gradient-anim px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 shadow-lg">
-          العودة للرئيسية <ArrowRight className="h-4 w-4" />
-        </Link>
-      </motion.div>
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <div className="max-w-md text-center surface-card rounded-2xl p-10">
+        <h1 className="text-7xl font-extrabold text-gradient-primary">404</h1>
+        <h2 className="mt-4 text-xl font-semibold">الصفحة غير موجودة</h2>
+        <Link to="/" className="mt-6 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90">العودة للرئيسية</Link>
+      </div>
     </div>
   );
 }
-
 
 export const Route = createRootRoute({
   head: () => ({
@@ -229,21 +211,6 @@ function UserMenu() {
   );
 }
 
-function CommandTrigger() {
-  const fire = () => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }));
-  return (
-    <button
-      onClick={fire}
-      className="hidden md:flex items-center gap-2 rounded-full bg-secondary/70 hover:bg-secondary text-muted-foreground px-3 py-1.5 text-xs border border-border transition"
-      aria-label="بحث سريع"
-    >
-      <Search className="h-3.5 w-3.5" />
-      <span>بحث سريع…</span>
-      <kbd className="ml-1 rounded bg-background border border-border px-1.5 py-0.5 text-[10px] font-mono">Ctrl K</kbd>
-    </button>
-  );
-}
-
 function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
   return (
     <header className="sticky top-0 z-30 glass-strong border-b border-border">
@@ -251,15 +218,8 @@ function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
         <button onClick={onOpenSidebar} className="rounded-lg p-2 hover:bg-secondary transition-colors" aria-label="فتح القائمة">
           <Menu className="h-5 w-5" />
         </button>
-        <Link to="/" className="text-lg font-extrabold text-gradient-primary flex items-center gap-2">
-          <motion.span animate={{ rotate: [0, 8, -8, 0] }} transition={{ duration: 6, repeat: Infinity }}>
-            <GraduationCap className="h-5 w-5" />
-          </motion.span>
-          توجيهي فوكس
-        </Link>
+        <Link to="/" className="text-lg font-extrabold text-gradient-primary">توجيهي فوكس</Link>
         <div className="flex items-center gap-2">
-          <CommandTrigger />
-          <StreakChip />
           <ActiveTaskBadge />
           <UserMenu />
         </div>
@@ -275,28 +235,14 @@ function RootComponent() {
   useTrackVisits();
   useEffect(() => { setSidebarOpen(false); }, []);
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="h-10 w-10 rounded-full border-2 border-primary border-t-transparent"
-        />
-      </div>
-    );
+    return <div className="flex min-h-screen items-center justify-center"><div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" /></div>;
   }
   const hideTopBar = location.pathname === "/focus";
   return (
     <div className="min-h-screen">
-      <ScrollProgress />
-      <CursorGlow />
-      <CommandPalette />
       {!hideTopBar && <TopBar onOpenSidebar={() => setSidebarOpen(true)} />}
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <main>
-        <PageTransition><Outlet /></PageTransition>
-      </main>
+      <main><Outlet /></main>
     </div>
   );
 }
-
