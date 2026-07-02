@@ -229,6 +229,21 @@ function UserMenu() {
   );
 }
 
+function CommandTrigger() {
+  const fire = () => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }));
+  return (
+    <button
+      onClick={fire}
+      className="hidden md:flex items-center gap-2 rounded-full bg-secondary/70 hover:bg-secondary text-muted-foreground px-3 py-1.5 text-xs border border-border transition"
+      aria-label="بحث سريع"
+    >
+      <Search className="h-3.5 w-3.5" />
+      <span>بحث سريع…</span>
+      <kbd className="ml-1 rounded bg-background border border-border px-1.5 py-0.5 text-[10px] font-mono">Ctrl K</kbd>
+    </button>
+  );
+}
+
 function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
   return (
     <header className="sticky top-0 z-30 glass-strong border-b border-border">
@@ -236,8 +251,15 @@ function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
         <button onClick={onOpenSidebar} className="rounded-lg p-2 hover:bg-secondary transition-colors" aria-label="فتح القائمة">
           <Menu className="h-5 w-5" />
         </button>
-        <Link to="/" className="text-lg font-extrabold text-gradient-primary">توجيهي فوكس</Link>
+        <Link to="/" className="text-lg font-extrabold text-gradient-primary flex items-center gap-2">
+          <motion.span animate={{ rotate: [0, 8, -8, 0] }} transition={{ duration: 6, repeat: Infinity }}>
+            <GraduationCap className="h-5 w-5" />
+          </motion.span>
+          توجيهي فوكس
+        </Link>
         <div className="flex items-center gap-2">
+          <CommandTrigger />
+          <StreakChip />
           <ActiveTaskBadge />
           <UserMenu />
         </div>
@@ -253,14 +275,28 @@ function RootComponent() {
   useTrackVisits();
   useEffect(() => { setSidebarOpen(false); }, []);
   if (loading) {
-    return <div className="flex min-h-screen items-center justify-center"><div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" /></div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="h-10 w-10 rounded-full border-2 border-primary border-t-transparent"
+        />
+      </div>
+    );
   }
   const hideTopBar = location.pathname === "/focus";
   return (
     <div className="min-h-screen">
+      <ScrollProgress />
+      <CursorGlow />
+      <CommandPalette />
       {!hideTopBar && <TopBar onOpenSidebar={() => setSidebarOpen(true)} />}
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <main><Outlet /></main>
+      <main>
+        <PageTransition><Outlet /></PageTransition>
+      </main>
     </div>
   );
 }
+
