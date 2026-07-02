@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import appCss from "../styles.css?url";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { useIsAdmin } from "@/lib/use-role";
@@ -8,19 +9,36 @@ import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User } from "lucide-react";
+import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User, Search, Command as CommandIcon, Ghost, ArrowRight } from "lucide-react";
+import { ScrollProgress } from "@/components/ScrollProgress";
+import { CursorGlow } from "@/components/CursorGlow";
+import { CommandPalette } from "@/components/CommandPalette";
+import { PageTransition } from "@/components/PageTransition";
+import { StreakChip } from "@/components/StreakChip";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="max-w-md text-center surface-card rounded-2xl p-10">
-        <h1 className="text-7xl font-extrabold text-gradient-primary">404</h1>
-        <h2 className="mt-4 text-xl font-semibold">الصفحة غير موجودة</h2>
-        <Link to="/" className="mt-6 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90">العودة للرئيسية</Link>
-      </div>
+    <div className="flex min-h-screen items-center justify-center px-4 aurora-bg">
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 150, damping: 15 }}
+        className="max-w-md text-center surface-card rounded-3xl p-10 spotlight"
+      >
+        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity }} className="mx-auto mb-4 inline-block">
+          <Ghost className="h-16 w-16 text-primary" />
+        </motion.div>
+        <h1 className="text-8xl font-extrabold text-gradient-primary tracking-tight">404</h1>
+        <h2 className="mt-2 text-xl font-semibold">ضعنا في الطريق قليلاً</h2>
+        <p className="mt-2 text-sm text-muted-foreground">الصفحة يلي بتدور عليها مش موجودة، لكن في مليون طريق ثاني.</p>
+        <Link to="/" className="mt-6 inline-flex items-center gap-2 rounded-full gradient-anim px-6 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 shadow-lg">
+          العودة للرئيسية <ArrowRight className="h-4 w-4" />
+        </Link>
+      </motion.div>
     </div>
   );
 }
+
 
 export const Route = createRootRoute({
   head: () => ({
