@@ -37,7 +37,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-display: "Cairo", "Tajawal", system-ui, sans-serif;
+  --font-display: "Reem Kufi", "Cairo", "Tajawal", system-ui, sans-serif;
   --font-body: "Tajawal", system-ui, sans-serif;
   --font-quran: "Amiri", "Tajawal", serif;
 }
