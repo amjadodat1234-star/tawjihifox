@@ -9,11 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TutorRouteImport } from './routes/tutor'
 import { Route as SuggestionsRouteImport } from './routes/suggestions'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as QuranRouteImport } from './routes/quran'
 import { Route as PrayerRouteImport } from './routes/prayer'
+import { Route as PlanRouteImport } from './routes/plan'
 import { Route as NotesRouteImport } from './routes/notes'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
@@ -27,6 +29,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ForumIdRouteImport } from './routes/forum.$id'
 import { Route as ExamsSubjectRouteImport } from './routes/exams.$subject'
 
+const TutorRoute = TutorRouteImport.update({
+  id: '/tutor',
+  path: '/tutor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SuggestionsRoute = SuggestionsRouteImport.update({
   id: '/suggestions',
   path: '/suggestions',
@@ -50,6 +57,11 @@ const QuranRoute = QuranRouteImport.update({
 const PrayerRoute = PrayerRouteImport.update({
   id: '/prayer',
   path: '/prayer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanRoute = PlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotesRoute = NotesRouteImport.update({
@@ -124,11 +136,13 @@ export interface FileRoutesByFullPath {
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/notes': typeof NotesRoute
+  '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
+  '/tutor': typeof TutorRoute
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
 }
@@ -143,11 +157,13 @@ export interface FileRoutesByTo {
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/notes': typeof NotesRoute
+  '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
+  '/tutor': typeof TutorRoute
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
 }
@@ -163,11 +179,13 @@ export interface FileRoutesById {
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/notes': typeof NotesRoute
+  '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
+  '/tutor': typeof TutorRoute
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
 }
@@ -184,11 +202,13 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/login'
     | '/notes'
+    | '/plan'
     | '/prayer'
     | '/quran'
     | '/settings'
     | '/stats'
     | '/suggestions'
+    | '/tutor'
     | '/exams/$subject'
     | '/forum/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -203,11 +223,13 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/login'
     | '/notes'
+    | '/plan'
     | '/prayer'
     | '/quran'
     | '/settings'
     | '/stats'
     | '/suggestions'
+    | '/tutor'
     | '/exams/$subject'
     | '/forum/$id'
   id:
@@ -222,11 +244,13 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/login'
     | '/notes'
+    | '/plan'
     | '/prayer'
     | '/quran'
     | '/settings'
     | '/stats'
     | '/suggestions'
+    | '/tutor'
     | '/exams/$subject'
     | '/forum/$id'
   fileRoutesById: FileRoutesById
@@ -242,15 +266,24 @@ export interface RootRouteChildren {
   LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
   NotesRoute: typeof NotesRoute
+  PlanRoute: typeof PlanRoute
   PrayerRoute: typeof PrayerRoute
   QuranRoute: typeof QuranRoute
   SettingsRoute: typeof SettingsRoute
   StatsRoute: typeof StatsRoute
   SuggestionsRoute: typeof SuggestionsRoute
+  TutorRoute: typeof TutorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tutor': {
+      id: '/tutor'
+      path: '/tutor'
+      fullPath: '/tutor'
+      preLoaderRoute: typeof TutorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/suggestions': {
       id: '/suggestions'
       path: '/suggestions'
@@ -284,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/prayer'
       fullPath: '/prayer'
       preLoaderRoute: typeof PrayerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plan': {
+      id: '/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof PlanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notes': {
@@ -404,21 +444,14 @@ const rootRouteChildren: RootRouteChildren = {
   LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
   NotesRoute: NotesRoute,
+  PlanRoute: PlanRoute,
   PrayerRoute: PrayerRoute,
   QuranRoute: QuranRoute,
   SettingsRoute: SettingsRoute,
   StatsRoute: StatsRoute,
   SuggestionsRoute: SuggestionsRoute,
+  TutorRoute: TutorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
