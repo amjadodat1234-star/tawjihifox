@@ -109,8 +109,6 @@ function RoomPage() {
       setRemaining(left);
       if (left === 0 && !contributedRef.current && isMember && user) {
         contributedRef.current = true;
-        // Contribute minutes to my leaderboard row
-        supabase.rpc as unknown; // no-op typing shim
         (async () => {
           const mine = members.find((m) => m.user_id === user.id);
           const add = room.timer_duration_minutes || 25;
