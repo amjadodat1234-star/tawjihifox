@@ -38,6 +38,8 @@ function Focus() {
   const [newName, setNewName] = useState("");
   const [hours, setHours] = useState(0);
   const [mins, setMins] = useState(25);
+  const [days, setDays] = useState(3);
+  const [weeks, setWeeks] = useState(1);
 
   const [activeMission, setActiveMission] = useState<Mission | null>(null);
   const [seconds, setSeconds] = useState(0);
@@ -47,7 +49,10 @@ function Focus() {
   const [askComplete, setAskComplete] = useState<Mission | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const totalMin = hours * 60 + mins;
+  // Each period stores its target in minutes but the input unit differs
+  const DAY_MIN = 24 * 60;
+  const WEEK_MIN = 7 * DAY_MIN;
+  const totalMin = period === "daily" ? hours * 60 + mins : period === "weekly" ? days * DAY_MIN : weeks * WEEK_MIN;
   const visible = missions.filter((m) => tab === "active" ? m.status !== "completed" : m.status === "completed");
 
   // Load missions
