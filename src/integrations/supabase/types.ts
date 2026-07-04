@@ -380,6 +380,73 @@ export type Database = {
         }
         Relationships: []
       }
+      room_members: {
+        Row: {
+          focus_minutes: number
+          id: string
+          joined_at: string
+          room_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          focus_minutes?: number
+          id?: string
+          joined_at?: string
+          room_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          focus_minutes?: number
+          id?: string
+          joined_at?: string
+          room_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_members_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "study_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      room_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          room_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          room_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          room_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_messages_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "study_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       study_files: {
         Row: {
           created_at: string
@@ -443,6 +510,51 @@ export type Database = {
           subjects?: Json
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      study_rooms: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          max_members: number
+          name: string
+          owner_id: string
+          subject: string | null
+          timer_duration_minutes: number | null
+          timer_running: boolean
+          timer_started_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          max_members?: number
+          name: string
+          owner_id: string
+          subject?: string | null
+          timer_duration_minutes?: number | null
+          timer_running?: boolean
+          timer_started_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          max_members?: number
+          name?: string
+          owner_id?: string
+          subject?: string | null
+          timer_duration_minutes?: number | null
+          timer_running?: boolean
+          timer_started_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
