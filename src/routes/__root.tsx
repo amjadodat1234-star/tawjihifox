@@ -62,6 +62,7 @@ const navGroups = [
     { to: "/focus", label: "تايمر الإنجاز", icon: Brain },
   ] },
   { label: "المجتمع", items: [
+    { to: "/rooms", label: "غرف Live", icon: Radio },
     { to: "/forum", label: "المنتدى", icon: MessageSquare },
     { to: "/leaderboard", label: "المتصدرون", icon: Trophy },
   ] },
