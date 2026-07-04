@@ -450,3 +450,15 @@ function formatDuration(min: number) {
   const h = Math.floor(min / 60); const m = min % 60;
   return m > 0 ? `${h} س ${m} د` : `${h} س`;
 }
+
+function formatByPeriod(min: number, period: Period) {
+  if (period === "weekly") {
+    const days = Math.floor(min / (24 * 60));
+    return `${days} يوم`;
+  }
+  if (period === "monthly") {
+    const weeks = Math.floor(min / (7 * 24 * 60));
+    return `${weeks} أسبوع`;
+  }
+  return formatDuration(min);
+}
