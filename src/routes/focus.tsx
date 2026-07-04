@@ -301,14 +301,26 @@ function Focus() {
         <input value={newName} onChange={(e) => setNewName(e.target.value)} maxLength={120}
           placeholder="مثال: دراسة مادة التاريخ"
           className="w-full rounded-xl bg-secondary/50 border border-border px-4 py-3 text-sm outline-none focus:border-primary mb-4" />
-        <label className="block text-xs text-muted-foreground mb-2 font-semibold">المدة</label>
+        <label className="block text-xs text-muted-foreground mb-2 font-semibold">
+          {period === "daily" ? "المدة" : period === "weekly" ? "عدد الأيام لهذا الأسبوع" : "عدد الأسابيع لهذا الشهر"}
+        </label>
         <div className="flex items-center justify-center gap-3 mb-2">
-          <Stepper value={hours} onChange={setHours} min={0} max={5} label="ساعة" />
-          <div className="text-2xl font-extrabold text-muted-foreground">:</div>
-          <Stepper value={mins} onChange={(v) => setMins(v)} min={0} max={59} step={5} label="دقيقة" />
+          {period === "daily" && (<>
+            <Stepper value={hours} onChange={setHours} min={0} max={5} label="ساعة" />
+            <div className="text-2xl font-extrabold text-muted-foreground">:</div>
+            <Stepper value={mins} onChange={(v) => setMins(v)} min={0} max={59} step={5} label="دقيقة" />
+          </>)}
+          {period === "weekly" && (
+            <Stepper value={days} onChange={setDays} min={1} max={7} label="يوم" />
+          )}
+          {period === "monthly" && (
+            <Stepper value={weeks} onChange={setWeeks} min={1} max={4} label="أسبوع" />
+          )}
         </div>
-        <p className="text-center text-[11px] text-muted-foreground mb-4">الحد الأقصى: 5 ساعات ({MAX_MINUTES} دقيقة)</p>
-        <button onClick={addMission} disabled={!newName.trim() || totalMin < 5}
+        <p className="text-center text-[11px] text-muted-foreground mb-4">
+          {period === "daily" ? `الحد الأقصى: 5 ساعات (${MAX_MINUTES} دقيقة)` : period === "weekly" ? "من 1 إلى 7 أيام" : "من 1 إلى 4 أسابيع"}
+        </p>
+        <button onClick={addMission} disabled={!newName.trim() || totalMin < (period === "daily" ? 5 : period === "weekly" ? DAY_MIN : WEEK_MIN)}
           className="w-full rounded-2xl bg-gradient-to-r from-primary to-accent text-primary-foreground font-extrabold py-3 hover:scale-[1.01] transition disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2">
           <Plus className="h-4 w-4" /> أنشئ المهمة
         </button>
