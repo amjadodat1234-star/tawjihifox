@@ -114,8 +114,8 @@ function Focus() {
 
   const addMission = async () => {
     if (!newName.trim()) return toast.error("اكتب اسم المهمة");
-    if (totalMin < 5) return toast.error("الحد الأدنى 5 دقائق");
-    if (totalMin > MAX_MINUTES) return toast.error("الحد الأقصى 5 ساعات");
+    const minAllowed = period === "daily" ? 5 : period === "weekly" ? DAY_MIN : WEEK_MIN;
+    if (totalMin < minAllowed) return toast.error(period === "daily" ? "الحد الأدنى 5 دقائق" : period === "weekly" ? "يوم على الأقل" : "أسبوع على الأقل");
     const payload = { name: newName.trim(), target_minutes: totalMin, period, status: "pending" as const, done_minutes: 0 };
     if (user) {
       const { data, error } = await supabase.from("missions").insert({ ...payload, user_id: user.id }).select().single();
@@ -126,7 +126,7 @@ function Focus() {
       const next = [m, ...missions];
       setMissions(next); saveGuest(period, next);
     }
-    setNewName(""); setHours(0); setMins(25);
+    setNewName(""); setHours(0); setMins(25); setDays(3); setWeeks(1);
     toast.success("تمت إضافة المهمة ✨");
   };
 
