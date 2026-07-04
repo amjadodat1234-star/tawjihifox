@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User, Wand2, Target } from "lucide-react";
+import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User, Wand2, Target, Radio } from "lucide-react";
 
 function NotFoundComponent() {
   return (
@@ -62,6 +62,7 @@ const navGroups = [
     { to: "/focus", label: "تايمر الإنجاز", icon: Brain },
   ] },
   { label: "المجتمع", items: [
+    { to: "/rooms", label: "غرف Live", icon: Radio },
     { to: "/forum", label: "المنتدى", icon: MessageSquare },
     { to: "/leaderboard", label: "المتصدرون", icon: Trophy },
   ] },

@@ -13,6 +13,7 @@ import { Route as TutorRouteImport } from './routes/tutor'
 import { Route as SuggestionsRouteImport } from './routes/suggestions'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as QuranRouteImport } from './routes/quran'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as PlanRouteImport } from './routes/plan'
@@ -26,6 +27,7 @@ import { Route as ExamsRouteImport } from './routes/exams'
 import { Route as AzkarRouteImport } from './routes/azkar'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RoomsIdRouteImport } from './routes/rooms.$id'
 import { Route as ForumIdRouteImport } from './routes/forum.$id'
 import { Route as ExamsSubjectRouteImport } from './routes/exams.$subject'
 
@@ -47,6 +49,11 @@ const StatsRoute = StatsRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomsRoute = RoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuranRoute = QuranRouteImport.update({
@@ -114,6 +121,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoomsIdRoute = RoomsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => RoomsRoute,
+} as any)
 const ForumIdRoute = ForumIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -139,12 +151,14 @@ export interface FileRoutesByFullPath {
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
+  '/rooms': typeof RoomsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
   '/tutor': typeof TutorRoute
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
+  '/rooms/$id': typeof RoomsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -160,12 +174,14 @@ export interface FileRoutesByTo {
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
+  '/rooms': typeof RoomsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
   '/tutor': typeof TutorRoute
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
+  '/rooms/$id': typeof RoomsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -182,12 +198,14 @@ export interface FileRoutesById {
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
+  '/rooms': typeof RoomsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
   '/tutor': typeof TutorRoute
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
+  '/rooms/$id': typeof RoomsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -205,12 +223,14 @@ export interface FileRouteTypes {
     | '/plan'
     | '/prayer'
     | '/quran'
+    | '/rooms'
     | '/settings'
     | '/stats'
     | '/suggestions'
     | '/tutor'
     | '/exams/$subject'
     | '/forum/$id'
+    | '/rooms/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -226,12 +246,14 @@ export interface FileRouteTypes {
     | '/plan'
     | '/prayer'
     | '/quran'
+    | '/rooms'
     | '/settings'
     | '/stats'
     | '/suggestions'
     | '/tutor'
     | '/exams/$subject'
     | '/forum/$id'
+    | '/rooms/$id'
   id:
     | '__root__'
     | '/'
@@ -247,12 +269,14 @@ export interface FileRouteTypes {
     | '/plan'
     | '/prayer'
     | '/quran'
+    | '/rooms'
     | '/settings'
     | '/stats'
     | '/suggestions'
     | '/tutor'
     | '/exams/$subject'
     | '/forum/$id'
+    | '/rooms/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -269,6 +293,7 @@ export interface RootRouteChildren {
   PlanRoute: typeof PlanRoute
   PrayerRoute: typeof PrayerRoute
   QuranRoute: typeof QuranRoute
+  RoomsRoute: typeof RoomsRouteWithChildren
   SettingsRoute: typeof SettingsRoute
   StatsRoute: typeof StatsRoute
   SuggestionsRoute: typeof SuggestionsRoute
@@ -303,6 +328,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rooms': {
+      id: '/rooms'
+      path: '/rooms'
+      fullPath: '/rooms'
+      preLoaderRoute: typeof RoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quran': {
@@ -396,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rooms/$id': {
+      id: '/rooms/$id'
+      path: '/$id'
+      fullPath: '/rooms/$id'
+      preLoaderRoute: typeof RoomsIdRouteImport
+      parentRoute: typeof RoomsRoute
+    }
     '/forum/$id': {
       id: '/forum/$id'
       path: '/$id'
@@ -433,6 +472,16 @@ const ForumRouteChildren: ForumRouteChildren = {
 
 const ForumRouteWithChildren = ForumRoute._addFileChildren(ForumRouteChildren)
 
+interface RoomsRouteChildren {
+  RoomsIdRoute: typeof RoomsIdRoute
+}
+
+const RoomsRouteChildren: RoomsRouteChildren = {
+  RoomsIdRoute: RoomsIdRoute,
+}
+
+const RoomsRouteWithChildren = RoomsRoute._addFileChildren(RoomsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
@@ -447,6 +496,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanRoute: PlanRoute,
   PrayerRoute: PrayerRoute,
   QuranRoute: QuranRoute,
+  RoomsRoute: RoomsRouteWithChildren,
   SettingsRoute: SettingsRoute,
   StatsRoute: StatsRoute,
   SuggestionsRoute: SuggestionsRoute,

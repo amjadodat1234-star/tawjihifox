@@ -38,6 +38,8 @@ function Focus() {
   const [newName, setNewName] = useState("");
   const [hours, setHours] = useState(0);
   const [mins, setMins] = useState(25);
+  const [days, setDays] = useState(3);
+  const [weeks, setWeeks] = useState(1);
 
   const [activeMission, setActiveMission] = useState<Mission | null>(null);
   const [seconds, setSeconds] = useState(0);
@@ -47,7 +49,10 @@ function Focus() {
   const [askComplete, setAskComplete] = useState<Mission | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const totalMin = hours * 60 + mins;
+  // Each period stores its target in minutes but the input unit differs
+  const DAY_MIN = 24 * 60;
+  const WEEK_MIN = 7 * DAY_MIN;
+  const totalMin = period === "daily" ? hours * 60 + mins : period === "weekly" ? days * DAY_MIN : weeks * WEEK_MIN;
   const visible = missions.filter((m) => tab === "active" ? m.status !== "completed" : m.status === "completed");
 
   // Load missions
@@ -109,8 +114,8 @@ function Focus() {
 
   const addMission = async () => {
     if (!newName.trim()) return toast.error("اكتب اسم المهمة");
-    if (totalMin < 5) return toast.error("الحد الأدنى 5 دقائق");
-    if (totalMin > MAX_MINUTES) return toast.error("الحد الأقصى 5 ساعات");
+    const minAllowed = period === "daily" ? 5 : period === "weekly" ? DAY_MIN : WEEK_MIN;
+    if (totalMin < minAllowed) return toast.error(period === "daily" ? "الحد الأدنى 5 دقائق" : period === "weekly" ? "يوم على الأقل" : "أسبوع على الأقل");
     const payload = { name: newName.trim(), target_minutes: totalMin, period, status: "pending" as const, done_minutes: 0 };
     if (user) {
       const { data, error } = await supabase.from("missions").insert({ ...payload, user_id: user.id }).select().single();
@@ -121,7 +126,7 @@ function Focus() {
       const next = [m, ...missions];
       setMissions(next); saveGuest(period, next);
     }
-    setNewName(""); setHours(0); setMins(25);
+    setNewName(""); setHours(0); setMins(25); setDays(3); setWeeks(1);
     toast.success("تمت إضافة المهمة ✨");
   };
 
@@ -296,14 +301,26 @@ function Focus() {
         <input value={newName} onChange={(e) => setNewName(e.target.value)} maxLength={120}
           placeholder="مثال: دراسة مادة التاريخ"
           className="w-full rounded-xl bg-secondary/50 border border-border px-4 py-3 text-sm outline-none focus:border-primary mb-4" />
-        <label className="block text-xs text-muted-foreground mb-2 font-semibold">المدة</label>
+        <label className="block text-xs text-muted-foreground mb-2 font-semibold">
+          {period === "daily" ? "المدة" : period === "weekly" ? "عدد الأيام لهذا الأسبوع" : "عدد الأسابيع لهذا الشهر"}
+        </label>
         <div className="flex items-center justify-center gap-3 mb-2">
-          <Stepper value={hours} onChange={setHours} min={0} max={5} label="ساعة" />
-          <div className="text-2xl font-extrabold text-muted-foreground">:</div>
-          <Stepper value={mins} onChange={(v) => setMins(v)} min={0} max={59} step={5} label="دقيقة" />
+          {period === "daily" && (<>
+            <Stepper value={hours} onChange={setHours} min={0} max={5} label="ساعة" />
+            <div className="text-2xl font-extrabold text-muted-foreground">:</div>
+            <Stepper value={mins} onChange={(v) => setMins(v)} min={0} max={59} step={5} label="دقيقة" />
+          </>)}
+          {period === "weekly" && (
+            <Stepper value={days} onChange={setDays} min={1} max={7} label="يوم" />
+          )}
+          {period === "monthly" && (
+            <Stepper value={weeks} onChange={setWeeks} min={1} max={4} label="أسبوع" />
+          )}
         </div>
-        <p className="text-center text-[11px] text-muted-foreground mb-4">الحد الأقصى: 5 ساعات ({MAX_MINUTES} دقيقة)</p>
-        <button onClick={addMission} disabled={!newName.trim() || totalMin < 5}
+        <p className="text-center text-[11px] text-muted-foreground mb-4">
+          {period === "daily" ? `الحد الأقصى: 5 ساعات (${MAX_MINUTES} دقيقة)` : period === "weekly" ? "من 1 إلى 7 أيام" : "من 1 إلى 4 أسابيع"}
+        </p>
+        <button onClick={addMission} disabled={!newName.trim() || totalMin < (period === "daily" ? 5 : period === "weekly" ? DAY_MIN : WEEK_MIN)}
           className="w-full rounded-2xl bg-gradient-to-r from-primary to-accent text-primary-foreground font-extrabold py-3 hover:scale-[1.01] transition disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2">
           <Plus className="h-4 w-4" /> أنشئ المهمة
         </button>
@@ -345,7 +362,7 @@ function Focus() {
                     <h4 className={`font-bold truncate ${isDone ? "line-through text-muted-foreground" : ""}`}>{m.name}</h4>
                   </div>
                   <p className="text-[11px] text-muted-foreground">
-                    {formatDuration(m.done_minutes)} / {formatDuration(m.target_minutes)}
+                    {formatByPeriod(m.done_minutes, m.period)} / {formatByPeriod(m.target_minutes, m.period)}
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -432,4 +449,16 @@ function formatDuration(min: number) {
   if (min < 60) return `${min} د`;
   const h = Math.floor(min / 60); const m = min % 60;
   return m > 0 ? `${h} س ${m} د` : `${h} س`;
+}
+
+function formatByPeriod(min: number, period: Period) {
+  if (period === "weekly") {
+    const days = Math.floor(min / (24 * 60));
+    return `${days} يوم`;
+  }
+  if (period === "monthly") {
+    const weeks = Math.floor(min / (7 * 24 * 60));
+    return `${weeks} أسبوع`;
+  }
+  return formatDuration(min);
 }
