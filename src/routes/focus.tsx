@@ -362,7 +362,7 @@ function Focus() {
                     <h4 className={`font-bold truncate ${isDone ? "line-through text-muted-foreground" : ""}`}>{m.name}</h4>
                   </div>
                   <p className="text-[11px] text-muted-foreground">
-                    {formatDuration(m.done_minutes)} / {formatDuration(m.target_minutes)}
+                    {formatByPeriod(m.done_minutes, m.period)} / {formatByPeriod(m.target_minutes, m.period)}
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5">
