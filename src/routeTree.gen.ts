@@ -13,7 +13,6 @@ import { Route as TutorRouteImport } from './routes/tutor'
 import { Route as SuggestionsRouteImport } from './routes/suggestions'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as QuranRouteImport } from './routes/quran'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as PlanRouteImport } from './routes/plan'
@@ -27,6 +26,7 @@ import { Route as ExamsRouteImport } from './routes/exams'
 import { Route as AzkarRouteImport } from './routes/azkar'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RoomsIndexRouteImport } from './routes/rooms.index'
 import { Route as RoomsIdRouteImport } from './routes/rooms.$id'
 import { Route as ForumIdRouteImport } from './routes/forum.$id'
 import { Route as ExamsSubjectRouteImport } from './routes/exams.$subject'
@@ -49,11 +49,6 @@ const StatsRoute = StatsRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RoomsRoute = RoomsRouteImport.update({
-  id: '/rooms',
-  path: '/rooms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuranRoute = QuranRouteImport.update({
@@ -121,10 +116,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoomsIndexRoute = RoomsIndexRouteImport.update({
+  id: '/rooms/',
+  path: '/rooms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoomsIdRoute = RoomsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => RoomsRoute,
+  id: '/rooms/$id',
+  path: '/rooms/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ForumIdRoute = ForumIdRouteImport.update({
   id: '/$id',
@@ -151,7 +151,6 @@ export interface FileRoutesByFullPath {
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
-  '/rooms': typeof RoomsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
@@ -159,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
   '/rooms/$id': typeof RoomsIdRoute
+  '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -174,7 +174,6 @@ export interface FileRoutesByTo {
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
-  '/rooms': typeof RoomsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
@@ -182,6 +181,7 @@ export interface FileRoutesByTo {
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
   '/rooms/$id': typeof RoomsIdRoute
+  '/rooms': typeof RoomsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -198,7 +198,6 @@ export interface FileRoutesById {
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
   '/quran': typeof QuranRoute
-  '/rooms': typeof RoomsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
   '/suggestions': typeof SuggestionsRoute
@@ -206,6 +205,7 @@ export interface FileRoutesById {
   '/exams/$subject': typeof ExamsSubjectRoute
   '/forum/$id': typeof ForumIdRoute
   '/rooms/$id': typeof RoomsIdRoute
+  '/rooms/': typeof RoomsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -223,7 +223,6 @@ export interface FileRouteTypes {
     | '/plan'
     | '/prayer'
     | '/quran'
-    | '/rooms'
     | '/settings'
     | '/stats'
     | '/suggestions'
@@ -231,6 +230,7 @@ export interface FileRouteTypes {
     | '/exams/$subject'
     | '/forum/$id'
     | '/rooms/$id'
+    | '/rooms/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -246,7 +246,6 @@ export interface FileRouteTypes {
     | '/plan'
     | '/prayer'
     | '/quran'
-    | '/rooms'
     | '/settings'
     | '/stats'
     | '/suggestions'
@@ -254,6 +253,7 @@ export interface FileRouteTypes {
     | '/exams/$subject'
     | '/forum/$id'
     | '/rooms/$id'
+    | '/rooms'
   id:
     | '__root__'
     | '/'
@@ -269,7 +269,6 @@ export interface FileRouteTypes {
     | '/plan'
     | '/prayer'
     | '/quran'
-    | '/rooms'
     | '/settings'
     | '/stats'
     | '/suggestions'
@@ -277,6 +276,7 @@ export interface FileRouteTypes {
     | '/exams/$subject'
     | '/forum/$id'
     | '/rooms/$id'
+    | '/rooms/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -293,11 +293,12 @@ export interface RootRouteChildren {
   PlanRoute: typeof PlanRoute
   PrayerRoute: typeof PrayerRoute
   QuranRoute: typeof QuranRoute
-  RoomsRoute: typeof RoomsRouteWithChildren
   SettingsRoute: typeof SettingsRoute
   StatsRoute: typeof StatsRoute
   SuggestionsRoute: typeof SuggestionsRoute
   TutorRoute: typeof TutorRoute
+  RoomsIdRoute: typeof RoomsIdRoute
+  RoomsIndexRoute: typeof RoomsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -328,13 +329,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rooms': {
-      id: '/rooms'
-      path: '/rooms'
-      fullPath: '/rooms'
-      preLoaderRoute: typeof RoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quran': {
@@ -428,12 +422,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rooms/': {
+      id: '/rooms/'
+      path: '/rooms'
+      fullPath: '/rooms/'
+      preLoaderRoute: typeof RoomsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rooms/$id': {
       id: '/rooms/$id'
-      path: '/$id'
+      path: '/rooms/$id'
       fullPath: '/rooms/$id'
       preLoaderRoute: typeof RoomsIdRouteImport
-      parentRoute: typeof RoomsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/forum/$id': {
       id: '/forum/$id'
@@ -472,16 +473,6 @@ const ForumRouteChildren: ForumRouteChildren = {
 
 const ForumRouteWithChildren = ForumRoute._addFileChildren(ForumRouteChildren)
 
-interface RoomsRouteChildren {
-  RoomsIdRoute: typeof RoomsIdRoute
-}
-
-const RoomsRouteChildren: RoomsRouteChildren = {
-  RoomsIdRoute: RoomsIdRoute,
-}
-
-const RoomsRouteWithChildren = RoomsRoute._addFileChildren(RoomsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
@@ -496,11 +487,12 @@ const rootRouteChildren: RootRouteChildren = {
   PlanRoute: PlanRoute,
   PrayerRoute: PrayerRoute,
   QuranRoute: QuranRoute,
-  RoomsRoute: RoomsRouteWithChildren,
   SettingsRoute: SettingsRoute,
   StatsRoute: StatsRoute,
   SuggestionsRoute: SuggestionsRoute,
   TutorRoute: TutorRoute,
+  RoomsIdRoute: RoomsIdRoute,
+  RoomsIndexRoute: RoomsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
