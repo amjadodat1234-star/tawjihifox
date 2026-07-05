@@ -515,45 +515,66 @@ export type Database = {
       }
       study_rooms: {
         Row: {
+          break_duration_minutes: number
           created_at: string
           description: string | null
+          focus_duration_minutes: number
           id: string
+          invite_code: string
           is_public: boolean
           max_members: number
           name: string
           owner_id: string
           subject: string | null
           timer_duration_minutes: number | null
+          timer_ends_at: string | null
+          timer_mode: string
+          timer_paused_seconds_left: number | null
           timer_running: boolean
           timer_started_at: string | null
+          timer_state: string
           updated_at: string
         }
         Insert: {
+          break_duration_minutes?: number
           created_at?: string
           description?: string | null
+          focus_duration_minutes?: number
           id?: string
+          invite_code?: string
           is_public?: boolean
           max_members?: number
           name: string
           owner_id: string
           subject?: string | null
           timer_duration_minutes?: number | null
+          timer_ends_at?: string | null
+          timer_mode?: string
+          timer_paused_seconds_left?: number | null
           timer_running?: boolean
           timer_started_at?: string | null
+          timer_state?: string
           updated_at?: string
         }
         Update: {
+          break_duration_minutes?: number
           created_at?: string
           description?: string | null
+          focus_duration_minutes?: number
           id?: string
+          invite_code?: string
           is_public?: boolean
           max_members?: number
           name?: string
           owner_id?: string
           subject?: string | null
           timer_duration_minutes?: number | null
+          timer_ends_at?: string | null
+          timer_mode?: string
+          timer_paused_seconds_left?: number | null
           timer_running?: boolean
           timer_started_at?: string | null
+          timer_state?: string
           updated_at?: string
         }
         Relationships: []
