@@ -386,7 +386,6 @@ export type Database = {
           id: string
           joined_at: string
           room_id: string
-          status: string
           user_id: string
         }
         Insert: {
@@ -394,7 +393,6 @@ export type Database = {
           id?: string
           joined_at?: string
           room_id: string
-          status?: string
           user_id: string
         }
         Update: {
@@ -402,7 +400,6 @@ export type Database = {
           id?: string
           joined_at?: string
           room_id?: string
-          status?: string
           user_id?: string
         }
         Relationships: [
@@ -526,12 +523,9 @@ export type Database = {
           name: string
           owner_id: string
           subject: string | null
-          timer_duration_minutes: number | null
           timer_ends_at: string | null
           timer_mode: string
           timer_paused_seconds_left: number | null
-          timer_running: boolean
-          timer_started_at: string | null
           timer_state: string
           updated_at: string
         }
@@ -547,12 +541,9 @@ export type Database = {
           name: string
           owner_id: string
           subject?: string | null
-          timer_duration_minutes?: number | null
           timer_ends_at?: string | null
           timer_mode?: string
           timer_paused_seconds_left?: number | null
-          timer_running?: boolean
-          timer_started_at?: string | null
           timer_state?: string
           updated_at?: string
         }
@@ -568,12 +559,9 @@ export type Database = {
           name?: string
           owner_id?: string
           subject?: string | null
-          timer_duration_minutes?: number | null
           timer_ends_at?: string | null
           timer_mode?: string
           timer_paused_seconds_left?: number | null
-          timer_running?: boolean
-          timer_started_at?: string | null
           timer_state?: string
           updated_at?: string
         }
@@ -661,6 +649,14 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_room_member: {
+        Args: { _room_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_room_owner: {
+        Args: { _room_id: string; _user_id: string }
         Returns: boolean
       }
     }
