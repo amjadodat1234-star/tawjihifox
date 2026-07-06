@@ -1,37 +1,31 @@
-// Server-authoritative timer helpers for study rooms.
-// The DB is the single source of truth (timer_state, timer_ends_at, timer_paused_seconds_left).
-
 export type TimerState = "idle" | "running" | "paused" | "break" | "finished";
 export type TimerMode = "focus" | "break";
 
-export interface RoomTimer {
-  timer_state: TimerState;
-  timer_mode: TimerMode;
+export interface RoomTimerRow {
+  timer_state: TimerState | string;
+  timer_mode: TimerMode | string;
   timer_ends_at: string | null;
   timer_paused_seconds_left: number | null;
   focus_duration_minutes: number;
   break_duration_minutes: number;
 }
 
-/** Computes remaining seconds right now for the room's timer. */
-export function computeRemaining(r: RoomTimer, now: number = Date.now()): number {
-  if (r.timer_state === "running" || r.timer_state === "break") {
-    if (!r.timer_ends_at) return 0;
-    return Math.max(0, Math.floor((new Date(r.timer_ends_at).getTime() - now) / 1000));
+/** Seconds remaining for the given row, computed against `now` (server-authoritative via timer_ends_at). */
+export function secondsLeft(row: RoomTimerRow, now: number = Date.now()): number {
+  if (row.timer_state === "paused") return Math.max(0, row.timer_paused_seconds_left ?? 0);
+  if (row.timer_state === "running" || row.timer_state === "break") {
+    if (!row.timer_ends_at) return 0;
+    return Math.max(0, Math.round((new Date(row.timer_ends_at).getTime() - now) / 1000));
   }
-  if (r.timer_state === "paused") return Math.max(0, r.timer_paused_seconds_left ?? 0);
-  if (r.timer_state === "finished") return 0;
-  return r.focus_duration_minutes * 60;
+  if (row.timer_state === "idle") {
+    return (row.timer_mode === "break" ? row.break_duration_minutes : row.focus_duration_minutes) * 60;
+  }
+  return 0;
 }
 
-export function totalSecondsForPhase(r: RoomTimer): number {
-  if (r.timer_state === "break" || (r.timer_state === "paused" && r.timer_mode === "break"))
-    return r.break_duration_minutes * 60;
-  return r.focus_duration_minutes * 60;
-}
-
-export function formatClock(sec: number): string {
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+export function fmt(sec: number): string {
+  const s = Math.max(0, Math.floor(sec));
+  const mm = String(Math.floor(s / 60)).padStart(2, "0");
+  const ss = String(s % 60).padStart(2, "0");
+  return `${mm}:${ss}`;
 }
