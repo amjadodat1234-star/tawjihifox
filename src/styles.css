@@ -9,7 +9,7 @@
 @import "@fontsource/manrope/500.css";
 @import "@fontsource/manrope/600.css";
 @import "@fontsource/manrope/700.css";
-@import url("https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap");
+
 
 @custom-variant dark (&:is(.dark *));
 
