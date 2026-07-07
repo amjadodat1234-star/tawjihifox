@@ -444,6 +444,70 @@ export type Database = {
           },
         ]
       }
+      room_task_completions: {
+        Row: {
+          completed_at: string
+          id: string
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_task_completions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "room_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      room_tasks: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          position: number
+          room_id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          position?: number
+          room_id: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          position?: number
+          room_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_tasks_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "study_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       study_files: {
         Row: {
           created_at: string
@@ -513,8 +577,12 @@ export type Database = {
       study_rooms: {
         Row: {
           break_duration_minutes: number
+          completed_sessions: number
           created_at: string
           description: string | null
+          end_time: string | null
+          ended_at: string | null
+          error_count: number
           focus_duration_minutes: number
           id: string
           invite_code: string
@@ -522,6 +590,10 @@ export type Database = {
           max_members: number
           name: string
           owner_id: string
+          password_hash: string | null
+          pinned_message: string | null
+          start_time: string | null
+          state: string
           subject: string | null
           timer_ends_at: string | null
           timer_mode: string
@@ -531,8 +603,12 @@ export type Database = {
         }
         Insert: {
           break_duration_minutes?: number
+          completed_sessions?: number
           created_at?: string
           description?: string | null
+          end_time?: string | null
+          ended_at?: string | null
+          error_count?: number
           focus_duration_minutes?: number
           id?: string
           invite_code?: string
@@ -540,6 +616,10 @@ export type Database = {
           max_members?: number
           name: string
           owner_id: string
+          password_hash?: string | null
+          pinned_message?: string | null
+          start_time?: string | null
+          state?: string
           subject?: string | null
           timer_ends_at?: string | null
           timer_mode?: string
@@ -549,8 +629,12 @@ export type Database = {
         }
         Update: {
           break_duration_minutes?: number
+          completed_sessions?: number
           created_at?: string
           description?: string | null
+          end_time?: string | null
+          ended_at?: string | null
+          error_count?: number
           focus_duration_minutes?: number
           id?: string
           invite_code?: string
@@ -558,6 +642,10 @@ export type Database = {
           max_members?: number
           name?: string
           owner_id?: string
+          password_hash?: string | null
+          pinned_message?: string | null
+          start_time?: string | null
+          state?: string
           subject?: string | null
           timer_ends_at?: string | null
           timer_mode?: string
@@ -644,12 +732,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      extend_room: {
+        Args: { _add_minutes: number; _room_id: string }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      join_room: {
+        Args: { _password?: string; _room_id: string }
+        Returns: Json
+      }
+      kick_member: {
+        Args: { _room_id: string; _user_id: string }
+        Returns: Json
+      }
+      refresh_room_state: { Args: { _room_id: string }; Returns: string }
+      set_room_password: {
+        Args: { _password: string; _room_id: string }
+        Returns: Json
       }
     }
     Enums: {
