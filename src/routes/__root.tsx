@@ -111,22 +111,24 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
           <button onClick={onClose} className="rounded-lg p-2 hover:bg-secondary"><X className="h-5 w-5" /></button>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto scrollbar-thin">
-          {navGroups.map((group) => (
-            <div key={group.label}>
+          {navGroups.map((group, gi) => (
+            <motion.div key={group.label} initial={false} animate={open ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+              transition={{ duration: 0.35, delay: open ? gi * 0.06 : 0, ease: [0.2, 0.8, 0.2, 1] }}>
               <p className="px-4 mb-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{group.label}</p>
               <div className="space-y-0.5">
                 {group.items.map(({ to, label, icon: Icon }) => {
                   const active = location.pathname === to;
                   return (
-                    <Link key={to} to={to} onClick={onClose} className={`flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all ${active ? "bg-primary/10 text-primary font-semibold" : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground"}`}>
-                      <Icon className="h-4 w-4" />
+                    <Link key={to} to={to} onClick={onClose} className={`group flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all hover:translate-x-[-4px] ${active ? "bg-primary/10 text-primary font-semibold" : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground"}`}>
+                      <Icon className={`h-4 w-4 transition-transform group-hover:scale-110 ${active ? "text-primary" : ""}`} />
                       <span>{label}</span>
                     </Link>
                   );
                 })}
               </div>
-            </div>
+            </motion.div>
           ))}
+
           {isAdmin && (
             <div>
               <p className="px-4 mb-1.5 text-[10px] font-bold text-primary uppercase tracking-wider">الإدارة</p>
