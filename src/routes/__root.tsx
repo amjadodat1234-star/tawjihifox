@@ -95,9 +95,15 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { location } = useRouterState();
   return (
     <>
-      {open && <div onClick={onClose} className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm" />}
+      <AnimatePresence>
+        {open && (
+          <motion.div key="ov" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm" />
+        )}
+      </AnimatePresence>
       <aside className={`fixed inset-y-0 right-0 z-50 flex w-72 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border elev-shadow transition-transform duration-300 ${open ? "translate-x-0" : "translate-x-full"}`}>
         <div className="flex items-center justify-between px-6 py-5 border-b border-sidebar-border">
+
           <div>
             <h1 className="text-xl font-extrabold text-gradient-primary">توجيهي فوكس</h1>
             <p className="mt-0.5 text-[10px] text-muted-foreground">منصة تعليمية ذكية</p>
