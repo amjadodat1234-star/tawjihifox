@@ -103,8 +103,8 @@ function Welcome() {
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold mb-5 leading-[1.15] tracking-tight overflow-hidden">
-          <span className="block overflow-hidden"><span className="rise-line">مو مجرد موقع.</span></span>
-          <span className="block overflow-hidden">
+          <span className="block overflow-hidden pb-2"><span className="rise-line">مو مجرد موقع.</span></span>
+          <span className="block overflow-hidden pb-2">
             <span className="rise-line text-gradient-hero" style={{ animationDelay: "0.15s" }}>رفيقك الذكي للتوجيهي.</span>
           </span>
         </h1>
