@@ -62,7 +62,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 const navGroups = [
   { label: "الذكاء", items: [
     { to: "/", label: "الترحيب", icon: Home },
-    { to: "/tutor", label: "أستاذ فوكس AI", icon: Wand2 },
+    { to: "/tutor", label: "أستاذ فوكس", icon: Wand2 },
     { to: "/plan", label: "خطة مذاكرتي", icon: Target },
     { to: "/focus", label: "تايمر الإنجاز", icon: Brain },
   ] },
