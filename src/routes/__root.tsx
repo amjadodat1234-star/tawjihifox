@@ -221,20 +221,76 @@ function UserMenu() {
   );
 }
 
-function TopBar({ onOpenSidebar }: { onOpenSidebar: () => void }) {
+const quickLinks = [
+  { to: "/tutor", label: "أستاذ فوكس" },
+  { to: "/plan", label: "خطة مذاكرتي" },
+  { to: "/focus", label: "تايمر الإنجاز" },
+  { to: "/forum", label: "المنتدى" },
+  { to: "/exams", label: "الاختبارات" },
+] as const;
+
+function TopBar({ onOpenSidebar, open }: { onOpenSidebar: () => void; open: boolean }) {
+  const { location } = useRouterState();
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-30 glass-strong border-b border-border">
-      <div className="flex items-center justify-between px-4 py-3 gap-2">
-        <button onClick={onOpenSidebar} className="rounded-lg p-2 hover:bg-secondary transition-colors" aria-label="فتح القائمة">
-          <Menu className="h-5 w-5" />
-        </button>
-        <Link to="/" className="text-lg font-extrabold text-gradient-primary">توجيهي فوكس</Link>
+    <motion.header
+      initial={{ y: -24, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+      className={`sticky top-0 z-30 glass-strong transition-all duration-300 ${scrolled ? "border-b border-border shadow-[0_6px_24px_-16px_rgba(15,23,42,.45)]" : "border-b border-transparent"}`}
+    >
+      {/* progress-like top accent */}
+      <div className="absolute inset-x-0 top-0 h-[2px] gradient-anim opacity-70" />
+
+      <div className={`mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 transition-all duration-300 ${scrolled ? "py-2" : "py-3.5"}`}>
+        <div className="flex items-center gap-2">
+          <button onClick={onOpenSidebar} className="rounded-xl p-2 hover:bg-secondary transition-colors" aria-label="فتح القائمة">
+            <motion.span animate={{ rotate: open ? 90 : 0 }} transition={{ type: "spring", stiffness: 300, damping: 20 }} className="block">
+              <Menu className="h-5 w-5" />
+            </motion.span>
+          </button>
+
+          <Link to="/" className="group flex items-center gap-2">
+            <motion.span whileHover={{ rotate: -8, scale: 1.08 }} transition={{ type: "spring", stiffness: 320, damping: 14 }}
+              className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-md shadow-primary/25">
+              <Brain className="h-4 w-4" />
+            </motion.span>
+            <span className="flex flex-col leading-none">
+              <span className="text-base font-extrabold text-gradient-primary">توجيهي فوكس</span>
+              <span className="mt-0.5 hidden text-[10px] text-muted-foreground sm:block">منصة تعليمية ذكية</span>
+            </span>
+          </Link>
+        </div>
+
+        {/* Desktop quick nav with animated active pill */}
+        <nav className="hidden lg:flex items-center gap-1">
+          {quickLinks.map((l) => {
+            const active = location.pathname === l.to;
+            return (
+              <Link key={l.to} to={l.to} className="relative rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors">
+                {active && (
+                  <motion.span layoutId="nav-pill" transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    className="absolute inset-0 rounded-full bg-primary/10 ring-1 ring-primary/20" />
+                )}
+                <span className={`relative ${active ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>{l.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
         <div className="flex items-center gap-2">
           <ActiveTaskBadge />
           <UserMenu />
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
 
@@ -250,9 +306,19 @@ function RootComponent() {
   const hideTopBar = location.pathname === "/focus";
   return (
     <div className="min-h-screen">
-      {!hideTopBar && <TopBar onOpenSidebar={() => setSidebarOpen(true)} />}
+      {!hideTopBar && <TopBar open={sidebarOpen} onOpenSidebar={() => setSidebarOpen(true)} />}
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <main><Outlet /></main>
+      <main>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={location.pathname}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}>
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
+      </main>
     </div>
   );
 }
