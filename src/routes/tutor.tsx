@@ -13,7 +13,7 @@ export const Route = createFileRoute("/tutor")({
   head: () => ({
     meta: [
       { title: "أستاذ فوكس — مساعد ذكي لطلاب التوجيهي" },
-      { name: "description", content: "مساعد AI متخصص بمنهاج التوجيهي الأردني: اشرحلي، اختبرني، لخّصلي." },
+      { name: "description", content: "معلم متخصص بمنهاج التوجيهي الأردني: اشرحلي، اختبرني، لخّصلي." },
     ],
   }),
 });

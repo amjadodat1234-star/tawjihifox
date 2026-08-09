@@ -9,9 +9,9 @@ export const Route = createFileRoute("/")({ component: Welcome });
 const pillars = [
   {
     icon: Wand2,
-    title: "أستاذ فوكس AI",
+    title: "أستاذ فوكس",
     tag: "الميزة النجمة",
-    desc: "معلم ذكي متاح 24/7. يشرحلك أي درس، يختبرك ويصحح إجاباتك، أو يلخصلك أي نص بضغطة زر.",
+    desc: "معلم خصوصي متاح 24/7. يشرحلك أي درس، يختبرك ويصحح إجاباتك، أو يلخصلك أي نص بضغطة زر.",
     color: "from-violet-500 to-purple-600",
     to: "/tutor",
     bullets: ["اشرحلي أي مفهوم بلغة سهلة", "اختبرني — 5 أسئلة + تصحيح", "لخّصلي أي نص بثواني"],
@@ -82,8 +82,8 @@ function Welcome() {
 
   return (
     <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-16">
-      {/* Ambient hero background */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[720px] overflow-hidden">
+      {/* Ambient hero background — full bleed across the viewport */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 h-screen w-screen overflow-hidden -z-10">
         <div className="aurora" />
         <div className="grid-veil" />
       </div>
@@ -102,12 +102,18 @@ function Welcome() {
           <div className="orbit-ring rev" style={{ width: 640, height: 640, left: -320, top: -320 }} />
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-5 leading-[1.15] tracking-tight overflow-hidden">
-          <span className="block overflow-hidden pb-2"><span className="rise-line">مو مجرد موقع.</span></span>
-          <span className="block overflow-hidden pb-2">
-            <span className="rise-line text-gradient-hero" style={{ animationDelay: "0.15s" }}>رفيقك الذكي للتوجيهي.</span>
-          </span>
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-5 leading-[1.5] tracking-tight">
+          <motion.span initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }} className="block">
+            مو مجرد موقع.
+          </motion.span>
+          <motion.span initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.2, 0.8, 0.2, 1] }}
+            className="block text-gradient-hero pb-3">
+            رفيقك الذكي للتوجيهي.
+          </motion.span>
         </h1>
+
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }}
           className="max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed mb-8">
           منصة تعرف نقاط ضعفك، تشرحلك لما تحتار، تختبرك لما تجهز، وتبنيلك جدول يومي يوصلك ليوم الامتحان.
@@ -187,7 +193,7 @@ function Welcome() {
           </div>
           <div className="space-y-3">
             {[
-              { a: "روابط PDFs متفرقة", b: "معلم AI يشرحلك ويختبرك" },
+              { a: "روابط PDFs متفرقة", b: "معلم يشرحلك ويختبرك خطوة بخطوة" },
               { a: "جدول جامد نفسه للكل", b: "خطة تتكيف مع ضعفك ووقتك" },
               { a: "تايمر Pomodoro عادي", b: "تايمر إنجاز + ستريك + متصدرين" },
             ].map((r, i) => (
