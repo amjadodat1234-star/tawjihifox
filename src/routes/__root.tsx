@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import appCss from "../styles.css?url";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { useIsAdmin } from "@/lib/use-role";
