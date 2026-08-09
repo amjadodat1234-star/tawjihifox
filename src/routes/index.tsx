@@ -81,7 +81,13 @@ function Welcome() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-14 pb-16">
+    <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-16">
+      {/* Ambient hero background */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[720px] overflow-hidden">
+        <div className="aurora" />
+        <div className="grid-veil" />
+      </div>
+
       {/* Live badge */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
         className="mx-auto mb-8 flex w-fit items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-semibold">
@@ -90,39 +96,52 @@ function Welcome() {
       </motion.div>
 
       {/* Hero */}
-      <div className="text-center mb-14">
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="text-5xl md:text-7xl font-extrabold mb-5 leading-[1.05] tracking-tight">
-          مو مجرد موقع.
-          <br />
-          <span className="text-gradient-hero">رفيقك الذكي للتوجيهي.</span>
-        </motion.h1>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+      <div className="relative text-center mb-14">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 hidden -translate-x-1/2 -translate-y-1/2 md:block">
+          <div className="orbit-ring" style={{ width: 460, height: 460, left: -230, top: -230 }} />
+          <div className="orbit-ring rev" style={{ width: 640, height: 640, left: -320, top: -320 }} />
+        </div>
+
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-5 leading-[1.15] tracking-tight overflow-hidden">
+          <span className="block overflow-hidden"><span className="rise-line">مو مجرد موقع.</span></span>
+          <span className="block overflow-hidden">
+            <span className="rise-line text-gradient-hero" style={{ animationDelay: "0.15s" }}>رفيقك الذكي للتوجيهي.</span>
+          </span>
+        </h1>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }}
           className="max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed mb-8">
           منصة تعرف نقاط ضعفك، تشرحلك لما تحتار، تختبرك لما تجهز، وتبنيلك جدول يومي يوصلك ليوم الامتحان.
           <br /> <span className="text-foreground font-semibold">مو موقع روابط. رفيق مذاكرة حقيقي.</span>
         </motion.p>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
           className="flex flex-wrap gap-3 justify-center">
-          <Link to={user ? "/tutor" : "/login"} className="group relative overflow-hidden rounded-full gradient-anim text-white px-8 py-3.5 font-bold flex items-center gap-2 shadow-lg shadow-primary/25">
-            <Wand2 className="h-4 w-4" />
-            <span>جرّب أستاذ فوكس مجاناً</span>
-            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition" />
-          </Link>
-          <Link to="/plan" className="rounded-full surface-card px-8 py-3.5 font-bold hover:border-primary/50 flex items-center gap-2">
-            <Target className="h-4 w-4 text-primary" /> ابنِ خطتك
-          </Link>
+          <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}>
+            <Link to={user ? "/tutor" : "/login"} className="sheen group relative rounded-full gradient-anim text-white px-8 py-3.5 font-bold flex items-center gap-2 shadow-lg shadow-primary/25">
+              <Wand2 className="h-4 w-4" />
+              <span>جرّب أستاذ فوكس مجاناً</span>
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition" />
+            </Link>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}>
+            <Link to="/plan" className="glass-border rounded-full surface-card px-8 py-3.5 font-bold hover:border-primary/50 flex items-center gap-2">
+              <Target className="h-4 w-4 text-primary" /> ابنِ خطتك
+            </Link>
+          </motion.div>
         </motion.div>
 
         {/* Micro-proof */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
           className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" /> مجاني 100%</span>
-          <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" /> بدون إعلانات</span>
-          <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-emerald-500" /> منهاج التوجيهي الأردني</span>
+          {["مجاني 100%", "بدون إعلانات", "منهاج التوجيهي الأردني"].map((t, i) => (
+            <motion.span key={t} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 + i * 0.1 }} className="flex items-center gap-1.5">
+              <Check className="h-3.5 w-3.5 text-emerald-500" /> {t}
+            </motion.span>
+          ))}
         </motion.div>
       </div>
+
 
       {/* Pillars — the 3 value propositions */}
       <div className="grid gap-5 md:grid-cols-3 mb-14">
