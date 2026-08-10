@@ -2,6 +2,8 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } f
 import { useEffect, useState } from "react";
 import appCss from "../styles.css?url";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
+import { CohortProvider } from "@/lib/cohort";
+
 import { useTrackVisits } from "@/lib/track-visit";
 import { Toaster } from "@/components/ui/sonner";
 import { Sidebar, TopBar, PageTransition } from "@/components/AppChrome";
@@ -46,14 +48,17 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <head><HeadContent /></head>
       <body>
         <AuthProvider>
-          {children}
-          <Toaster />
+          <CohortProvider>
+            {children}
+            <Toaster />
+          </CohortProvider>
         </AuthProvider>
         <Scripts />
       </body>
     </html>
   );
 }
+
 
 function RootComponent() {
   const { loading } = useAuth();

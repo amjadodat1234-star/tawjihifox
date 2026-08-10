@@ -9,33 +9,33 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Brain, Clock, BookOpen, Sparkles, BarChart3, Settings, MessageSquare, LogOut, Menu, X, FileText, FolderOpen, GraduationCap, Trophy, Lightbulb, ShieldCheck, Home, LogIn, User, Wand2, Target, Radio } from "lucide-react";
 
 const navGroups = [
-  { label: "الذكاء", items: [
-    { to: "/", label: "الترحيب", icon: Home },
-    { to: "/tutor", label: "أستاذ فوكس", icon: Wand2 },
+  { label: "الدراسة والإنجاز", items: [
+    { to: "/", label: "الرئيسية", icon: Home },
+    { to: "/focus", label: "المهام والجلسات", icon: Brain },
+    { to: "/progress", label: "تقدّمي", icon: BarChart3 },
+    { to: "/exams", label: "الاختبارات", icon: GraduationCap },
     { to: "/plan", label: "خطة مذاكرتي", icon: Target },
-    { to: "/focus", label: "تايمر الإنجاز", icon: Brain },
+    { to: "/tutor", label: "أستاذ فوكس", icon: Wand2 },
   ] },
   { label: "المجتمع", items: [
-    { to: "/rooms", label: "غرف Live", icon: Radio },
+    { to: "/rooms", label: "غرف الدراسة", icon: Radio },
     { to: "/forum", label: "المنتدى", icon: MessageSquare },
-    { to: "/leaderboard", label: "المتصدرون", icon: Trophy },
+    { to: "/leaderboard", label: "الترتيب", icon: Trophy },
   ] },
   { label: "روحانيات", items: [
     { to: "/prayer", label: "أوقات الصلاة", icon: Clock },
     { to: "/quran", label: "ورد القرآن", icon: BookOpen },
     { to: "/azkar", label: "الأذكار", icon: Sparkles },
   ] },
-  { label: "الدراسة", items: [
-    { to: "/exams", label: "الاختبارات", icon: GraduationCap },
-    { to: "/files", label: "ملفات الدراسة", icon: FolderOpen },
-  ] },
   { label: "شخصي", items: [
     { to: "/notes", label: "المذكرات", icon: FileText },
+    { to: "/files", label: "ملفات الدراسة", icon: FolderOpen },
     { to: "/stats", label: "الإحصائيات", icon: BarChart3 },
     { to: "/suggestions", label: "اقتراحات", icon: Lightbulb },
     { to: "/settings", label: "الإعدادات", icon: Settings },
   ] },
 ] as const;
+
 
 export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user, signOut } = useAuth();

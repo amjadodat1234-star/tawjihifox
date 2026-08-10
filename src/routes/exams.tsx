@@ -67,8 +67,9 @@ function Exams() {
             );
           }
           return (
-            <Link key={s.id} to="/exams/$subject" params={{ subject: s.id }} search={{ semester }}
+            <Link key={s.id} to="/exams/$subject" params={{ subject: s.id }}
               className="surface-card rounded-2xl p-6 hover-lift">
+
               <GraduationCap className="h-6 w-6 text-primary mb-3" />
               <h3 className="text-xl font-bold mb-1">{s.name}</h3>
               <p className="text-xs text-muted-foreground">{semester === "s1" ? "الفصل الأول" : "الفصل الثاني"}</p>

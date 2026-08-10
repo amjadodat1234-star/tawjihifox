@@ -21,7 +21,7 @@ export const Route = createFileRoute("/progress")({
   component: Progress,
 });
 
-export default function noop() { /* placeholder to keep module side-effect free */ }
+
 
 function Progress() {
   const { user } = useAuth();

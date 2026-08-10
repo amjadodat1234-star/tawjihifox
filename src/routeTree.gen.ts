@@ -14,6 +14,7 @@ import { Route as SuggestionsRouteImport } from './routes/suggestions'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as QuranRouteImport } from './routes/quran'
+import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as PrayerRouteImport } from './routes/prayer'
 import { Route as PlanRouteImport } from './routes/plan'
 import { Route as NotesRouteImport } from './routes/notes'
@@ -54,6 +55,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const QuranRoute = QuranRouteImport.update({
   id: '/quran',
   path: '/quran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrayerRoute = PrayerRouteImport.update({
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/notes': typeof NotesRoute
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
+  '/progress': typeof ProgressRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/notes': typeof NotesRoute
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
+  '/progress': typeof ProgressRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/notes': typeof NotesRoute
   '/plan': typeof PlanRoute
   '/prayer': typeof PrayerRoute
+  '/progress': typeof ProgressRoute
   '/quran': typeof QuranRoute
   '/settings': typeof SettingsRoute
   '/stats': typeof StatsRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/notes'
     | '/plan'
     | '/prayer'
+    | '/progress'
     | '/quran'
     | '/settings'
     | '/stats'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/notes'
     | '/plan'
     | '/prayer'
+    | '/progress'
     | '/quran'
     | '/settings'
     | '/stats'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/notes'
     | '/plan'
     | '/prayer'
+    | '/progress'
     | '/quran'
     | '/settings'
     | '/stats'
@@ -292,6 +304,7 @@ export interface RootRouteChildren {
   NotesRoute: typeof NotesRoute
   PlanRoute: typeof PlanRoute
   PrayerRoute: typeof PrayerRoute
+  ProgressRoute: typeof ProgressRoute
   QuranRoute: typeof QuranRoute
   SettingsRoute: typeof SettingsRoute
   StatsRoute: typeof StatsRoute
@@ -336,6 +349,13 @@ declare module '@tanstack/react-router' {
       path: '/quran'
       fullPath: '/quran'
       preLoaderRoute: typeof QuranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/prayer': {
@@ -486,6 +506,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotesRoute: NotesRoute,
   PlanRoute: PlanRoute,
   PrayerRoute: PrayerRoute,
+  ProgressRoute: ProgressRoute,
   QuranRoute: QuranRoute,
   SettingsRoute: SettingsRoute,
   StatsRoute: StatsRoute,
