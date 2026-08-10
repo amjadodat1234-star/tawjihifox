@@ -304,6 +304,7 @@ export type Database = {
           id: string
           image_url: string | null
           pinned: boolean
+          section: string
           title: string
           user_id: string
         }
@@ -314,6 +315,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           pinned?: boolean
+          section?: string
           title: string
           user_id: string
         }
@@ -324,6 +326,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           pinned?: boolean
+          section?: string
           title?: string
           user_id?: string
         }
@@ -333,21 +336,30 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          daily_goal_minutes: number
           display_name: string | null
+          field: string | null
+          generation: string | null
           id: string
           name_updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          daily_goal_minutes?: number
           display_name?: string | null
+          field?: string | null
+          generation?: string | null
           id: string
           name_updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          daily_goal_minutes?: number
           display_name?: string | null
+          field?: string | null
+          generation?: string | null
           id?: string
           name_updated_at?: string
         }
@@ -655,6 +667,42 @@ export type Database = {
         }
         Relationships: []
       }
+      study_tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          duration_minutes: number
+          id: string
+          status: string
+          subject: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          status?: string
+          subject?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          status?: string
+          subject?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       suggestions: {
         Row: {
           content: string
@@ -675,6 +723,27 @@ export type Database = {
           created_at?: string
           id?: string
           status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_achievements: {
+        Row: {
+          code: string
+          id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          id?: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          id?: string
+          unlocked_at?: string
           user_id?: string
         }
         Relationships: []
