@@ -118,8 +118,11 @@ export type Database = {
         Row: {
           created_at: string
           duration_seconds: number | null
+          field: string | null
+          generation: string | null
           id: string
           score: number
+          semester: string | null
           subject: string
           total: number
           user_id: string
@@ -128,8 +131,11 @@ export type Database = {
         Insert: {
           created_at?: string
           duration_seconds?: number | null
+          field?: string | null
+          generation?: string | null
           id?: string
           score: number
+          semester?: string | null
           subject: string
           total: number
           user_id: string
@@ -138,8 +144,11 @@ export type Database = {
         Update: {
           created_at?: string
           duration_seconds?: number | null
+          field?: string | null
+          generation?: string | null
           id?: string
           score?: number
+          semester?: string | null
           subject?: string
           total?: number
           user_id?: string
@@ -152,8 +161,11 @@ export type Database = {
           completed: boolean | null
           completed_at: string
           duration_minutes: number
+          field: string | null
+          generation: string | null
           id: string
           subject: string | null
+          task_id: string | null
           task_name: string | null
           type: string
           user_id: string
@@ -162,8 +174,11 @@ export type Database = {
           completed?: boolean | null
           completed_at?: string
           duration_minutes: number
+          field?: string | null
+          generation?: string | null
           id?: string
           subject?: string | null
+          task_id?: string | null
           task_name?: string | null
           type?: string
           user_id: string
@@ -172,8 +187,11 @@ export type Database = {
           completed?: boolean | null
           completed_at?: string
           duration_minutes?: number
+          field?: string | null
+          generation?: string | null
           id?: string
           subject?: string | null
+          task_id?: string | null
           task_name?: string | null
           type?: string
           user_id?: string
@@ -669,10 +687,17 @@ export type Database = {
       }
       study_tasks: {
         Row: {
+          break_minutes: number
           completed_at: string | null
           created_at: string
+          done_minutes: number
           duration_minutes: number
+          field: string | null
+          generation: string | null
           id: string
+          long_break_minutes: number
+          session_minutes: number
+          sessions_done: number
           status: string
           subject: string | null
           title: string
@@ -680,10 +705,17 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          break_minutes?: number
           completed_at?: string | null
           created_at?: string
+          done_minutes?: number
           duration_minutes?: number
+          field?: string | null
+          generation?: string | null
           id?: string
+          long_break_minutes?: number
+          session_minutes?: number
+          sessions_done?: number
           status?: string
           subject?: string | null
           title: string
@@ -691,10 +723,17 @@ export type Database = {
           user_id: string
         }
         Update: {
+          break_minutes?: number
           completed_at?: string | null
           created_at?: string
+          done_minutes?: number
           duration_minutes?: number
+          field?: string | null
+          generation?: string | null
           id?: string
+          long_break_minutes?: number
+          session_minutes?: number
+          sessions_done?: number
           status?: string
           subject?: string | null
           title?: string

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { AuthGate, PageBackground } from "@/components/AuthGate";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { useCohort, isSubjectAllowed, fieldName, type FieldId, type Generation } from "@/lib/cohort";
+
 import { CheckCircle2, XCircle, ChevronRight, ArrowRight, Trophy } from "lucide-react";
 import { toast } from "sonner";
 
@@ -69,6 +71,7 @@ const QUESTIONS: Record<string, { name: string; s1: Q[]; s2: Q[] }> = {
 
 function ExamPage() {
   const { subject } = useParams({ from: "/exams/$subject" });
+  const { generation, field, ready } = useCohort();
   const data = QUESTIONS[subject];
   const [semester, setSemester] = useState<"s1" | "s2" | null>(null);
 
@@ -76,11 +79,37 @@ function ExamPage() {
     return <PageBackground><div className="p-8 text-center">المادة غير موجودة <Link to="/exams" className="text-primary">العودة</Link></div></PageBackground>;
   }
 
+  // Cohort is part of the infrastructure: exams are scoped to the student's track.
+  if (ready && !generation) {
+    return (
+      <PageBackground>
+        <div className="mx-auto max-w-xl px-4 py-16 text-center">
+          <h1 className="text-2xl font-extrabold mb-2">اختر جيلك أولاً</h1>
+          <p className="text-muted-foreground mb-6">الاختبارات مصنّفة حسب الجيل والحقل الدراسي.</p>
+          <Link to="/" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground">اختيار الجيل <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (ready && generation && !isSubjectAllowed(generation, field, subject)) {
+    return (
+      <PageBackground>
+        <div className="mx-auto max-w-xl px-4 py-16 text-center">
+          <h1 className="text-2xl font-extrabold mb-2">هذه المادة ليست ضمن مسارك</h1>
+          <p className="text-muted-foreground mb-6">جيل {generation}{field ? ` — ${fieldName(field)}` : ""}</p>
+          <Link to="/exams" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground">مواد مسارك <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+      </PageBackground>
+    );
+  }
+
   return (
     <PageBackground dim={0.65}>
       <div className="mx-auto max-w-3xl px-4 py-8">
         <Link to="/exams" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary mb-4"><ChevronRight className="h-4 w-4" />الرجوع للمواد</Link>
         <h1 className="text-3xl font-bold text-gradient-warm mb-2">{data.name}</h1>
+        <p className="text-xs text-muted-foreground mb-2">جيل {generation}{field ? ` — ${fieldName(field)}` : " — مادة مشتركة"}</p>
 
         {!semester ? (
           <div className="grid gap-4 sm:grid-cols-2 mt-6">
@@ -94,14 +123,15 @@ function ExamPage() {
             </button>
           </div>
         ) : (
-          <Quiz key={semester} subject={subject} year="2009" semester={semester} questions={data[semester]} onBack={() => setSemester(null)} />
+          <Quiz key={semester} subject={subject} year={generation ?? "2009"} generation={generation} field={field} semester={semester} questions={data[semester]} onBack={() => setSemester(null)} />
         )}
       </div>
     </PageBackground>
   );
 }
 
-function Quiz({ subject, year, semester, questions, onBack }: { subject: string; year: string; semester: string; questions: Q[]; onBack: () => void }) {
+
+function Quiz({ subject, year, generation, field, semester, questions, onBack }: { subject: string; year: string; generation: Generation | null; field: FieldId | null; semester: string; questions: Q[]; onBack: () => void }) {
   const { user } = useAuth();
   const [answers, setAnswers] = useState<(number | null)[]>(() => questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
@@ -117,8 +147,9 @@ function Quiz({ subject, year, semester, questions, onBack }: { subject: string;
     setSubmitted(true);
     const duration = Math.round((Date.now() - startTime) / 1000);
     if (user) {
-      await supabase.from("exam_attempts").insert({ user_id: user.id, subject, year, score, total: questions.length, duration_seconds: duration });
+      await supabase.from("exam_attempts").insert({ user_id: user.id, subject, year, score, total: questions.length, duration_seconds: duration, generation, field, semester } as never);
     }
+
     toast.success(`نتيجتك: ${score}/${questions.length}`);
   };
 

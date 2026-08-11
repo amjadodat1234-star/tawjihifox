@@ -58,6 +58,17 @@ export function fieldName(field: FieldId | null) {
   return FIELDS.find((f) => f.id === field)?.name ?? null;
 }
 
+/** Is this subject part of the student's own track? */
+export function isSubjectAllowed(generation: Generation | null, field: FieldId | null, subjectId: string) {
+  return subjectsFor(generation, field).some((s) => s.id === subjectId);
+}
+
+export function subjectName(subjectId: string) {
+  const all = [...COMMON, ...Object.values(FIELD_SUBJECTS).flat()];
+  return all.find((s) => s.id === subjectId)?.name ?? subjectId;
+}
+
+
 /** Forum sections: one shared community + specialised sections. */
 export function forumSections(generation: Generation | null, field: FieldId | null) {
   const base = [{ id: "general", name: "النقاش العام" }];
