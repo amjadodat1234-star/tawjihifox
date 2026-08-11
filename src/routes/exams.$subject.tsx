@@ -131,7 +131,7 @@ function ExamPage() {
 }
 
 
-function Quiz({ subject, year, semester, questions, onBack }: { subject: string; year: string; semester: string; questions: Q[]; onBack: () => void }) {
+function Quiz({ subject, year, generation, field, semester, questions, onBack }: { subject: string; year: string; generation: Generation | null; field: FieldId | null; semester: string; questions: Q[]; onBack: () => void }) {
   const { user } = useAuth();
   const [answers, setAnswers] = useState<(number | null)[]>(() => questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
@@ -147,8 +147,9 @@ function Quiz({ subject, year, semester, questions, onBack }: { subject: string;
     setSubmitted(true);
     const duration = Math.round((Date.now() - startTime) / 1000);
     if (user) {
-      await supabase.from("exam_attempts").insert({ user_id: user.id, subject, year, score, total: questions.length, duration_seconds: duration });
+      await supabase.from("exam_attempts").insert({ user_id: user.id, subject, year, score, total: questions.length, duration_seconds: duration, generation, field, semester } as never);
     }
+
     toast.success(`نتيجتك: ${score}/${questions.length}`);
   };
 
