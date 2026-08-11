@@ -3,6 +3,8 @@ import { useState } from "react";
 import { AuthGate, PageBackground } from "@/components/AuthGate";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { useCohort, isSubjectAllowed, fieldName, type FieldId, type Generation } from "@/lib/cohort";
+
 import { CheckCircle2, XCircle, ChevronRight, ArrowRight, Trophy } from "lucide-react";
 import { toast } from "sonner";
 
