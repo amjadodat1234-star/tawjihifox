@@ -250,9 +250,11 @@ export function TopBar({ onOpenSidebar, open }: { onOpenSidebar: () => void; ope
         </nav>
 
         <div className="flex items-center gap-2">
+          <CohortBadge />
           <ActiveTaskBadge />
           <UserMenu />
         </div>
+
       </div>
     </motion.header>
   );
